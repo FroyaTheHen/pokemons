@@ -72,7 +72,7 @@ function PokeStackNavigator() {
       <PokeStack.Screen
         name="PokeDetails"
         component={TabTwoScreen}
-        options={{ title: "Oops!" }}
+        options={{ title: "Pokemon Details" }}
       />
     </PokeStack.Navigator>
   );

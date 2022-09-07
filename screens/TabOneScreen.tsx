@@ -37,14 +37,15 @@ function TabOneScreenItem({
   const base_pokemon_data = usePokemonList();
 
   const renderItem = ({ item }: { item: Pokemon }) => (
-    <SafeAreaView>
+    <View style={styles.poke_button}>
       <Button
         onPress={() => {
           navigation.navigate("PokeDetails", { pokemon: item });
         }}
         title={item.name.toLocaleUpperCase()}
+        color="black"
       />
-    </SafeAreaView>
+    </View>
   );
 
   return base_pokemon_data ? (
@@ -69,7 +70,7 @@ export default function TabOneScreen({
   const indexes: number[] = generateIndexes();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <View>
         <FlatList
           data={indexes}
@@ -82,11 +83,16 @@ export default function TabOneScreen({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  poke_button: {
+    backgroundColor: "pink",
+    margin: 10,
+    padding: 10,
   },
+  // container: {
+  //   flex: 1,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
   title: {
     fontSize: 20,
     fontWeight: "bold",
@@ -102,12 +108,5 @@ const styles = StyleSheet.create({
   wrapperCustom: {
     borderRadius: 8,
     padding: 6,
-  },
-  pokemon_card: {
-    flex: 0.3,
-    borderWidth: 0,
-    backgroundColor: "pink",
-    borderRadius: 20,
-    marginBottom: 10,
   },
 });
