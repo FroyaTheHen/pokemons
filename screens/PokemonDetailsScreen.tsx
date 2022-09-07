@@ -1,15 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-  Button,
-} from "react-native";
+import React, { useContext, useState } from "react";
+import { StyleSheet, Image, ActivityIndicator, Button } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text, View } from "../components/Themed";
+import FavouritesPokemonsContext from "../FavouritesContext";
 import { fetchData, Pokemon } from "../pokemons/Pokemons";
 import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
@@ -17,6 +13,10 @@ import { useAsyncEffect } from "../utils";
 type Props = NativeStackScreenProps<RootTabParamList, "TabTwo">;
 
 export default function TabPokemonDetailsScreen(params: Props) {
+  const { favouritesPokemons, addFavouritesPokemon } = useContext(
+    FavouritesPokemonsContext
+  );
+
   const [pokemon, setPokemon] = useState<Pokemon>();
 
   useAsyncEffect(async () => {
@@ -51,6 +51,8 @@ export default function TabPokemonDetailsScreen(params: Props) {
       <Button
         onPress={() => {
           console.log("favourites");
+          addFavouritesPokemon(pokemon);
+          favouritesPokemons.forEach((poke) => console.log(poke.name));
         }}
         title={"favourites"}
         color="black"

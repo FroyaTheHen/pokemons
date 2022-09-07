@@ -67,8 +67,6 @@ function TabNav() {
           } else if (route.name === "List") {
             iconName = "ios-list-outline";
           }
-
-          // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "pink",
