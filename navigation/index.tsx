@@ -14,8 +14,8 @@ import * as React from "react";
 import { ColorSchemeName } from "react-native";
 
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import TabPokemonListScreen from "../screens/PokemonListScreen";
+import TabPokemonDetailsScreen from "../screens/PokemonDetailsScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -66,13 +66,13 @@ function PokeStackNavigator() {
     <PokeStack.Navigator>
       <PokeStack.Screen
         name="PokeList"
-        component={TabOneScreen}
-        options={{ headerShown: false }}
+        component={TabPokemonListScreen}
+        options={({ headerShown: false }, { title: "List" })}
       />
       <PokeStack.Screen
         name="PokeDetails"
-        component={TabTwoScreen}
-        options={{ title: "Pokemon Details" }}
+        component={TabPokemonDetailsScreen}
+        options={{ title: "Details" }}
       />
     </PokeStack.Navigator>
   );

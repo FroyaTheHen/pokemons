@@ -16,7 +16,6 @@ export interface Pokemon {
   height: number;
   weight: number;
   base_experience: number;
-  held_items: Array<any>;
 }
 
 interface PokeBase {

@@ -9,7 +9,7 @@ import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
 type Props = NativeStackScreenProps<RootTabParamList, "TabTwo">;
 
-export default function TabTwoScreen(params: Props) {
+export default function TabPokemonDetailsScreen(params: Props) {
   const [pokemon, setPokemon] = useState<Pokemon>();
 
   useAsyncEffect(async () => {
@@ -31,9 +31,7 @@ export default function TabTwoScreen(params: Props) {
       <View style={styles.poke_details_container}>
         <View>
           <Text style={styles.poke_detail}>height: {pokemon.height}</Text>
-          <Text style={styles.poke_detail}>
-            held items: {pokemon.held_items}
-          </Text>
+          <Text style={styles.poke_detail}>lorem ipsum</Text>
         </View>
 
         <View>

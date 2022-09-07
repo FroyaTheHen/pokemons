@@ -29,7 +29,7 @@ function usePokemonList() {
   return data;
 }
 
-function TabOneScreenItem({
+function TabPokemonListItem({
   navigation,
 }: {
   navigation: RootTabScreenProps<"TabOne">["navigation"];
@@ -47,7 +47,6 @@ function TabOneScreenItem({
       />
     </View>
   );
-
   return base_pokemon_data ? (
     <View>
       <FlatList
@@ -61,11 +60,11 @@ function TabOneScreenItem({
   );
 }
 
-export default function TabOneScreen({
+export default function TabPokemonListScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
   const renderItem = ({ item }: { item: number }) => (
-    <TabOneScreenItem navigation={navigation} />
+    <TabPokemonListItem navigation={navigation} />
   );
   const indexes: number[] = generateIndexes();
 
@@ -88,11 +87,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
   },
-  // container: {
-  //   flex: 1,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
   title: {
     fontSize: 20,
     fontWeight: "bold",
