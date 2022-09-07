@@ -3,7 +3,6 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -12,18 +11,15 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-
-import NotFoundScreen from "../screens/NotFoundScreen";
 import TabPokemonListScreen from "../screens/PokemonListScreen";
 import TabPokemonDetailsScreen from "../screens/PokemonDetailsScreen";
-import { RootStackParamList } from "../types";
+import TabPokemonFavouritesScreen from "../screens/PokemonFavourites";
 import LinkingConfiguration from "./LinkingConfiguration";
 
-export default function Navigation({
-  colorScheme,
-}: {
-  colorScheme: ColorSchemeName;
-}) {
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+export function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
@@ -34,32 +30,11 @@ export default function Navigation({
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-function RootNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={PokeStackNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      {/* <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group> */}
-    </Stack.Navigator>
-  );
-}
-const PokeStack = createNativeStackNavigator<any>();
+const PokeStack = createNativeStackNavigator<{
+  PokeList: undefined;
+  PokeDetails: undefined;
+  PokeFavourites: undefined;
+}>();
 
 function PokeStackNavigator() {
   return (
@@ -67,7 +42,7 @@ function PokeStackNavigator() {
       <PokeStack.Screen
         name="PokeList"
         component={TabPokemonListScreen}
-        options={({ headerShown: false }, { title: "List" })}
+        options={{ headerShown: false, title: "List" }}
       />
       <PokeStack.Screen
         name="PokeDetails"
@@ -78,12 +53,38 @@ function PokeStackNavigator() {
   );
 }
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+const Tab = createBottomTabNavigator();
+
+function TabNav() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Favourites") {
+            iconName = focused ? "ios-heart" : "ios-heart-outline";
+          } else if (route.name === "List") {
+            iconName = "ios-list-outline";
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "pink",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <Tab.Screen name="List" component={PokeStackNavigator} />
+      <Tab.Screen name="Favourites" component={TabPokemonFavouritesScreen} />
+    </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <TabNav />
+    </NavigationContainer>
+  );
 }

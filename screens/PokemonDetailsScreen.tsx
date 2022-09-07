@@ -1,12 +1,19 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
-import { StyleSheet, Image, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  Button,
+} from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text, View } from "../components/Themed";
 import { fetchData, Pokemon } from "../pokemons/Pokemons";
 import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
+
 type Props = NativeStackScreenProps<RootTabParamList, "TabTwo">;
 
 export default function TabPokemonDetailsScreen(params: Props) {
@@ -41,6 +48,13 @@ export default function TabPokemonDetailsScreen(params: Props) {
           </Text>
         </View>
       </View>
+      <Button
+        onPress={() => {
+          console.log("favourites");
+        }}
+        title={"favourites"}
+        color="black"
+      />
     </SafeAreaView>
   ) : (
     <ActivityIndicator />
@@ -64,5 +78,9 @@ const styles = StyleSheet.create({
   poke_detail: {
     padding: 10,
     backgroundColor: "pink",
+  },
+  wrapperCustom: {
+    borderRadius: 8,
+    padding: 6,
   },
 });
