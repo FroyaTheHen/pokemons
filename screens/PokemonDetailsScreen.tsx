@@ -1,19 +1,25 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useContext, useState } from "react";
-import { StyleSheet, Image, ActivityIndicator, Button } from "react-native";
-
-import { SafeAreaView } from "react-native-safe-area-context";
-
-import { Text, View } from "../components/Themed";
-import FavouritesPokemonsContext from "../FavouritesContext";
+import {
+  View,
+  SafeAreaView,
+  Text,
+  Pressable,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { FavouritesPokemonsContext } from "../FavouritesContext";
 import { fetchData, Pokemon } from "../pokemons/Pokemons";
 import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
 
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { globalStyles } from "../Styles";
+
 type Props = NativeStackScreenProps<RootTabParamList, "TabTwo">;
 
 export default function TabPokemonDetailsScreen(params: Props) {
-  const { favouritesPokemons, addFavouritesPokemon } = useContext(
+  const { validatePokemon, addFavouritesPokemon } = useContext(
     FavouritesPokemonsContext
   );
 
@@ -25,8 +31,8 @@ export default function TabPokemonDetailsScreen(params: Props) {
   }, [params.route.params.pokemon]);
 
   return pokemon ? (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>{pokemon.name.toLocaleUpperCase()}</Text>
+    <SafeAreaView style={globalStyles.container}>
+      <Text style={globalStyles.title}>{pokemon.name.toLocaleUpperCase()}</Text>
 
       <Image
         source={{
@@ -35,54 +41,32 @@ export default function TabPokemonDetailsScreen(params: Props) {
         style={{ width: 300, height: 300 }}
       />
 
-      <View style={styles.poke_details_container}>
+      <View style={globalStyles.poke_details_container}>
         <View>
-          <Text style={styles.poke_detail}>height: {pokemon.height}</Text>
-          <Text style={styles.poke_detail}>lorem ipsum</Text>
+          <Text style={globalStyles.poke_detail}>height: {pokemon.height}</Text>
+          <Text style={globalStyles.poke_detail}>lorem ipsum</Text>
         </View>
 
         <View>
-          <Text style={styles.poke_detail}>weight: {pokemon.weight}</Text>
-          <Text style={styles.poke_detail}>
+          <Text style={globalStyles.poke_detail}>weight: {pokemon.weight}</Text>
+          <Text style={globalStyles.poke_detail}>
             base experience: {pokemon.base_experience}
           </Text>
         </View>
       </View>
-      <Button
+      <Pressable
+        style={globalStyles.pressable_wrapper}
         onPress={() => {
-          console.log("favourites");
           addFavouritesPokemon(pokemon);
-          favouritesPokemons.forEach((poke) => console.log(poke.name));
         }}
-        title={"favourites"}
-        color="black"
-      />
+      >
+        <Text>
+          {validatePokemon(pokemon) ? "tak" : "nie"} add to favourites
+          <Ionicons name={"ios-heart-outline"} size={25} color={"#545453"} />
+        </Text>
+      </Pressable>
     </SafeAreaView>
   ) : (
     <ActivityIndicator />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "pink",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  poke_details_container: {
-    flexDirection: "row",
-  },
-  poke_detail: {
-    padding: 10,
-    backgroundColor: "pink",
-  },
-  wrapperCustom: {
-    borderRadius: 8,
-    padding: 6,
-  },
-});

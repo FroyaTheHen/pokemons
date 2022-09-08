@@ -1,8 +1,15 @@
 import React, { useContext } from "react";
-import { SafeAreaView, Text, Button, FlatList, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  FlatList,
+  Pressable,
+} from "react-native";
 import { FavouritesPokemonsContext } from "../FavouritesContext";
 import { View } from "../components/Themed";
 import { Pokemon } from "../pokemons/Pokemons";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { globalStyles } from "../Styles";
 
 export default function TabPokemonFavouritesScreen() {
   const { favouritesPokemons, deleteFavouritePokemon } = useContext(
@@ -10,15 +17,18 @@ export default function TabPokemonFavouritesScreen() {
   );
 
   const Item = ({ poke }: { item: Pokemon }) => (
-    <View style={styles.poke_button}>
-      <Text style={styles.title}>{poke.name}</Text>
-      <Button
+    <View style={globalStyles.poke_button}>
+      <Text style={globalStyles.title}>{poke.name} </Text>
+      <Pressable
         onPress={() => {
           deleteFavouritePokemon(poke);
         }}
-        title={"remove"}
-        color="black"
-      />
+      >
+        <Text>
+          remove from favouries
+          <Ionicons name={"ios-trash"} size={25} color={"#545453"} />
+        </Text>
+      </Pressable>
     </View>
   );
 
@@ -30,15 +40,3 @@ export default function TabPokemonFavouritesScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  poke_button: {
-    backgroundColor: "pink",
-    margin: 10,
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
-    textTransform: "uppercase",
-  },
-});

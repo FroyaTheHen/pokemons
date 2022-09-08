@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import { Pokemon } from "./pokemons/Pokemons";
+import { View, Text } from "react-native";
 
 interface Pikapika {
   favouritesPokemons: Array<Pokemon>;
@@ -48,6 +49,8 @@ export function FavouritesPokemonProvider({
     },
     [favouritesPokemons, validatePokemon]
   );
+
+  // const addOrRemoveFromFavourites()
 
   return (
     <FavouritesPokemonsContext.Provider

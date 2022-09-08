@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   SafeAreaView,
   FlatList,
-  Button,
   ActivityIndicator,
+  Pressable,
+  Text,
 } from "react-native";
-
+import { globalStyles } from "../Styles";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import {
@@ -37,23 +37,19 @@ function TabPokemonListItem({
   const base_pokemon_data = usePokemonList();
 
   const renderItem = ({ item }: { item: Pokemon }) => (
-    <View style={styles.poke_button}>
-      <Button
+    <View style={globalStyles.poke_button}>
+      <Pressable
         onPress={() => {
           navigation.navigate("PokeDetails", { pokemon: item });
         }}
-        title={item.name.toLocaleUpperCase()}
-        color="black"
-      />
+      >
+        <Text style={globalStyles.title}>{item.name}</Text>
+      </Pressable>
     </View>
   );
   return base_pokemon_data ? (
     <View>
-      <FlatList
-        data={base_pokemon_data.results}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <FlatList data={base_pokemon_data.results} renderItem={renderItem} />
     </View>
   ) : (
     <ActivityIndicator />
@@ -71,36 +67,8 @@ export default function TabPokemonListScreen({
   return (
     <SafeAreaView>
       <View>
-        <FlatList
-          data={indexes}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <FlatList data={indexes} renderItem={renderItem} />
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  poke_button: {
-    backgroundColor: "pink",
-    margin: 10,
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-  text: {
-    fontSize: 16,
-  },
-  wrapperCustom: {
-    borderRadius: 8,
-    padding: 6,
-  },
-});
