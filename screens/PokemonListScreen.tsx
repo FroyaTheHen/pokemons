@@ -10,8 +10,8 @@ import {
   URL,
 } from "../pokemons/Pokemons";
 import { useAsyncEffect } from "../utils";
-import { Example } from "../Xd";
-function usePokemonList() {
+import { Example, PokeRow } from "../Xd";
+export function usePokemonList() {
   const [data, setData] = useState<PokemonBaseResource>();
 
   useAsyncEffect(async () => {
@@ -29,7 +29,7 @@ export default function TabPokemonListScreen({
 
   const renderPokemon = ({ item }: { item: Pokemon }) => (
     <View>
-      <Example></Example>
+      {/* <Example></Example> */}
       <Pressable
         style={({ pressed }) => [
           {
@@ -48,6 +48,7 @@ export default function TabPokemonListScreen({
 
   return base_pokemon_data ? (
     <View>
+      <Example data={base_pokemon_data.results}></Example>
       <FlatList data={base_pokemon_data.results} renderItem={renderPokemon} />
     </View>
   ) : (
