@@ -52,7 +52,7 @@ function TabNav() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName = "";
 
           if (route.name === "Favourites") {
             iconName = focused ? "ios-heart" : "ios-heart-outline";
@@ -61,7 +61,7 @@ function TabNav() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "pink",
+        tabBarActiveTintColor: "blck",
         tabBarInactiveTintColor: "gray",
       })}
     >

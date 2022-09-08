@@ -1,28 +1,20 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   SafeAreaView,
   Text,
-  Pressable,
   Image,
   ActivityIndicator,
 } from "react-native";
-import { FavouritesPokemonsContext } from "../FavouritesContext";
 import { fetchData, Pokemon } from "../pokemons/Pokemons";
 import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
-
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { globalStyles } from "../Styles";
-
+import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
 type Props = NativeStackScreenProps<RootTabParamList, "TabTwo">;
 
 export default function TabPokemonDetailsScreen(params: Props) {
-  const { validatePokemon, addFavouritesPokemon } = useContext(
-    FavouritesPokemonsContext
-  );
-
   const [pokemon, setPokemon] = useState<Pokemon>();
 
   useAsyncEffect(async () => {
@@ -54,17 +46,7 @@ export default function TabPokemonDetailsScreen(params: Props) {
           </Text>
         </View>
       </View>
-      <Pressable
-        style={globalStyles.pressable_wrapper}
-        onPress={() => {
-          addFavouritesPokemon(pokemon);
-        }}
-      >
-        <Text>
-          {validatePokemon(pokemon) ? "tak" : "nie"} add to favourites
-          <Ionicons name={"ios-heart-outline"} size={25} color={"#545453"} />
-        </Text>
-      </Pressable>
+      <AddOrRemoveComponent poke={pokemon} />
     </SafeAreaView>
   ) : (
     <ActivityIndicator />

@@ -1,18 +1,11 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  FlatList,
-  ActivityIndicator,
-  Pressable,
-  Text,
-} from "react-native";
-import { globalStyles } from "../Styles";
+import { FlatList, ActivityIndicator, Pressable, Text } from "react-native";
+import { globalStyles, pokeGrey } from "../Styles";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import {
   Pokemon,
   fetchData,
-  generateIndexes,
   PokemonBaseResource,
   URL,
 } from "../pokemons/Pokemons";
@@ -29,16 +22,20 @@ function usePokemonList() {
   return data;
 }
 
-function TabPokemonListItem({
+export default function TabPokemonListScreen({
   navigation,
-}: {
-  navigation: RootTabScreenProps<"TabOne">["navigation"];
-}) {
+}: RootTabScreenProps<"PokeDetails">) {
   const base_pokemon_data = usePokemonList();
 
-  const renderItem = ({ item }: { item: Pokemon }) => (
-    <View style={globalStyles.poke_button}>
+  const renderPokemon = ({ item }: { item: Pokemon }) => (
+    <View>
       <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? pokeGrey : "white",
+          },
+          globalStyles.poke_button,
+        ]}
         onPress={() => {
           navigation.navigate("PokeDetails", { pokemon: item });
         }}
@@ -47,28 +44,12 @@ function TabPokemonListItem({
       </Pressable>
     </View>
   );
+
   return base_pokemon_data ? (
     <View>
-      <FlatList data={base_pokemon_data.results} renderItem={renderItem} />
+      <FlatList data={base_pokemon_data.results} renderItem={renderPokemon} />
     </View>
   ) : (
     <ActivityIndicator />
-  );
-}
-
-export default function TabPokemonListScreen({
-  navigation,
-}: RootTabScreenProps<"TabOne">) {
-  const renderItem = ({ item }: { item: number }) => (
-    <TabPokemonListItem navigation={navigation} />
-  );
-  const indexes: number[] = generateIndexes();
-
-  return (
-    <SafeAreaView>
-      <View>
-        <FlatList data={indexes} renderItem={renderItem} />
-      </View>
-    </SafeAreaView>
   );
 }
