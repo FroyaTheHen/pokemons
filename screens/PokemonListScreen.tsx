@@ -10,7 +10,7 @@ import {
   URL,
 } from "../pokemons/Pokemons";
 import { useAsyncEffect } from "../utils";
-
+import { Example } from "../Xd";
 function usePokemonList() {
   const [data, setData] = useState<PokemonBaseResource>();
 
@@ -29,6 +29,7 @@ export default function TabPokemonListScreen({
 
   const renderPokemon = ({ item }: { item: Pokemon }) => (
     <View>
+      <Example></Example>
       <Pressable
         style={({ pressed }) => [
           {
