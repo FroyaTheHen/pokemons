@@ -5,6 +5,7 @@ import { View } from "../components/Themed";
 import { Pokemon } from "../pokemons/Pokemons";
 import { globalStyles } from "../Styles";
 import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
+import { styles } from "../SwipeablePokeRowComponent";
 
 export default function TabPokemonFavouritesScreen() {
   const { favouritesPokemons } = useContext(FavouritesPokemonsContext);
@@ -26,7 +27,11 @@ export default function TabPokemonFavouritesScreen() {
 
   return (
     <View style={globalStyles.whiteBack}>
-      <FlatList data={favouritesPokemons} renderItem={renderItem} />
+      <FlatList
+        data={favouritesPokemons}
+        renderItem={renderItem}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
     </View>
   );
 }

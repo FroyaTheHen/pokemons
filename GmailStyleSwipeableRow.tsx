@@ -72,7 +72,7 @@ export default class GmailStyleSwipeableRow extends Component<
 const styles = StyleSheet.create({
   leftAction: {
     flex: 1,
-    backgroundColor: "#388e3c",
+    backgroundColor: "yellow",
     justifyContent: "flex-end",
     alignItems: "center",
     flexDirection: I18nManager.isRTL ? "row" : "row-reverse",
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   rightAction: {
     alignItems: "center",
     flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
-    backgroundColor: "#dd2c00",
+    backgroundColor: "green",
     flex: 1,
     justifyContent: "flex-end",
   },

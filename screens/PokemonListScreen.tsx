@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, ActivityIndicator, Pressable, Text } from "react-native";
+import { ActivityIndicator, Pressable, Text } from "react-native";
 import { globalStyles, pokeGrey } from "../Styles";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -10,7 +10,7 @@ import {
   URL,
 } from "../pokemons/Pokemons";
 import { useAsyncEffect } from "../utils";
-import { Example, PokeRow } from "../Xd";
+import { Example } from "../SwipeablePokeRowComponent";
 export function usePokemonList() {
   const [data, setData] = useState<PokemonBaseResource>();
 
@@ -29,7 +29,6 @@ export default function TabPokemonListScreen({
 
   const renderPokemon = ({ item }: { item: Pokemon }) => (
     <View>
-      {/* <Example></Example> */}
       <Pressable
         style={({ pressed }) => [
           {
@@ -48,8 +47,11 @@ export default function TabPokemonListScreen({
 
   return base_pokemon_data ? (
     <View>
-      <Example data={base_pokemon_data.results}></Example>
-      <FlatList data={base_pokemon_data.results} renderItem={renderPokemon} />
+      <Example
+        data={base_pokemon_data.results}
+        navigation={navigation}
+      ></Example>
+      {/* <FlatList data={base_pokemon_data.results} renderItem={renderPokemon} /> */}
     </View>
   ) : (
     <ActivityIndicator />
