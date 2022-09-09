@@ -19,7 +19,7 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
-    fontSize: 20,
+    fontSize: 15,
     textTransform: "capitalize",
   },
   poke_details_container: {

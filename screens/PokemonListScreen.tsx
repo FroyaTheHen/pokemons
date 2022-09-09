@@ -51,7 +51,6 @@ export default function TabPokemonListScreen({
         data={base_pokemon_data.results}
         navigation={navigation}
       ></Example>
-      {/* <FlatList data={base_pokemon_data.results} renderItem={renderPokemon} /> */}
     </View>
   ) : (
     <ActivityIndicator />

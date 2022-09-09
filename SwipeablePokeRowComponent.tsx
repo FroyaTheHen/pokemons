@@ -24,7 +24,6 @@ const Row = ({ item, navigation }: { item: Pokemon; navigation: any }) => (
 
 const SwipeableRow = ({
   item,
-  index,
   navigation,
 }: {
   item: Pokemon;
@@ -32,27 +31,18 @@ const SwipeableRow = ({
   navigation: object;
 }) => {
   return (
-    <GmailStyleSwipeableRow>
+    <GmailStyleSwipeableRow pokemon={item}>
       <Row item={item} navigation={navigation} />
     </GmailStyleSwipeableRow>
   );
 };
 
 export class Example extends Component {
-  data: Pokemon[];
-  navigation: any;
-
-  constructor(data: any, navigation: any) {
-    super();
-    this.data = data;
-    this.navigation = navigation;
-  }
-
   render() {
     return (
       <View>
         <FlatList
-          data={this.data.data}
+          data={this.props.data}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={({ item, index }) => (
             <SwipeableRow
@@ -76,6 +66,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flexDirection: "column",
     fontWeight: "bold",
+    fontSize: 15,
   },
   separator: {
     backgroundColor: "rgb(200, 199, 204)",
@@ -86,16 +77,4 @@ export const styles = StyleSheet.create({
 
     textTransform: "capitalize",
   },
-  // messageText: {
-  //   color: "#999",
-  //   backgroundColor: "transparent",
-  // },
-  // dateText: {
-  //   backgroundColor: "transparent",
-  //   position: "absolute",
-  //   right: 20,
-  //   top: 10,
-  //   color: "#999",
-  //   fontWeight: "bold",
-  // },
 });

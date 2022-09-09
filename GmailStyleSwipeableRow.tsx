@@ -1,15 +1,23 @@
+import { Ionicons } from "@expo/vector-icons";
 import React, { Component, PropsWithChildren } from "react";
-import { Animated, StyleSheet, I18nManager, View } from "react-native";
+import { Animated, StyleSheet, I18nManager, View, Text } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
 
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import { FavouritesPokemonsContext } from "./FavouritesContext";
+import { Pokemon } from "./pokemons/Pokemons";
+import { pokeGrey } from "./Styles";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default class GmailStyleSwipeableRow extends Component<
-  PropsWithChildren<unknown>
+  PropsWithChildren<{ pokemon: Pokemon }>
 > {
+  context!: React.ContextType<typeof FavouritesPokemonsContext>;
+
+  static contextType = FavouritesPokemonsContext;
+
   private renderLeftActions = (
     _progress: Animated.AnimatedInterpolation,
     dragX: Animated.AnimatedInterpolation
@@ -19,12 +27,19 @@ export default class GmailStyleSwipeableRow extends Component<
       outputRange: [0, 1],
       extrapolate: "clamp",
     });
-    return (
-      <RectButton style={styles.leftAction} onPress={this.close}>
-        {/* Change it to some icons */}
-        <AnimatedView style={[styles.actionIcon, { transform: [{ scale }] }]} />
-      </RectButton>
-    );
+    if (!this.context.isInFavourites(this.props.pokemon)) {
+      return undefined;
+    } else {
+      return (
+        <RectButton style={styles.leftAction} onPress={this.close}>
+          <AnimatedView style={[styles.actionIcon, { transform: [{ scale }] }]}>
+            <Text>
+              <Ionicons name={"ios-heart-outline"} size={30} color={pokeGrey} />
+            </Text>
+          </AnimatedView>
+        </RectButton>
+      );
+    }
   };
   private renderRightActions = (
     _progress: Animated.AnimatedInterpolation,
@@ -35,12 +50,19 @@ export default class GmailStyleSwipeableRow extends Component<
       outputRange: [1, 0],
       extrapolate: "clamp",
     });
-    return (
-      <RectButton style={styles.rightAction} onPress={this.close}>
-        {/* Change it to some icons */}
-        <AnimatedView style={[styles.actionIcon, { transform: [{ scale }] }]} />
-      </RectButton>
-    );
+    if (this.context.isInFavourites(this.props.pokemon)) {
+      return undefined;
+    } else {
+      return (
+        <RectButton style={styles.rightAction} onPress={this.close}>
+          <AnimatedView style={[styles.actionIcon, { transform: [{ scale }] }]}>
+            <Text>
+              <Ionicons name={"ios-heart"} size={30} color={pokeGrey} />
+            </Text>
+          </AnimatedView>
+        </RectButton>
+      );
+    }
   };
 
   private swipeableRow?: Swipeable;
@@ -51,6 +73,11 @@ export default class GmailStyleSwipeableRow extends Component<
   private close = () => {
     this.swipeableRow?.close();
   };
+
+  addOrRemoveFromFavourites = () => {
+    this.context.addOrRemoveFromFavourites(this.props.pokemon);
+  };
+
   render() {
     const { children } = this.props;
     return (
@@ -60,6 +87,7 @@ export default class GmailStyleSwipeableRow extends Component<
         leftThreshold={80}
         enableTrackpadTwoFingerGesture
         rightThreshold={40}
+        onSwipeableOpen={this.addOrRemoveFromFavourites}
         renderLeftActions={this.renderLeftActions}
         renderRightActions={this.renderRightActions}
       >
@@ -72,21 +100,18 @@ export default class GmailStyleSwipeableRow extends Component<
 const styles = StyleSheet.create({
   leftAction: {
     flex: 1,
-    backgroundColor: "yellow",
     justifyContent: "flex-end",
     alignItems: "center",
     flexDirection: I18nManager.isRTL ? "row" : "row-reverse",
   },
   actionIcon: {
-    width: 30,
+    width: 120,
     marginHorizontal: 10,
-    backgroundColor: "plum",
-    height: 20,
+    height: 40,
   },
   rightAction: {
     alignItems: "center",
     flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
-    backgroundColor: "green",
     flex: 1,
     justifyContent: "flex-end",
   },
