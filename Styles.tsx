@@ -3,14 +3,13 @@ import { StyleSheet } from "react-native";
 export const pokeGrey: string = "#D0D0D0";
 export const globalStyles = StyleSheet.create({
   poke_button: {
-    margin: 10,
-    padding: 10,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: pokeGrey,
-    height: 80,
-    justifyContent: "center",
     flex: 1,
+    height: 80,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flexDirection: "column",
+    fontWeight: "bold",
+    justifyContent: "center",
     alignItems: "center",
   },
   container: {
@@ -20,9 +19,8 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textTransform: "uppercase",
+    fontSize: 15,
+    textTransform: "capitalize",
   },
   poke_details_container: {
     flexDirection: "row",
