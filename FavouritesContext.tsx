@@ -3,16 +3,14 @@ import { Pokemon } from "./pokemons/Pokemons";
 
 interface Pikapika {
   favouritesPokemons: Array<Pokemon>;
-  addFavouritesPokemon: (pokemon: Pokemon) => void;
-  deleteFavouritePokemon: (pokemon: Pokemon) => void;
-  validatePokemon: (pokemon: Pokemon) => boolean;
+  isInFavourites: (pokemon: Pokemon) => boolean;
+  addOrRemoveFromFavourites: (pokemon: Pokemon) => void;
 }
 
 export const FavouritesPokemonsContext = React.createContext<Pikapika>({
   favouritesPokemons: [],
-  addFavouritesPokemon: () => undefined,
-  deleteFavouritePokemon: () => undefined,
-  validatePokemon: () => false,
+  isInFavourites: () => false,
+  addOrRemoveFromFavourites: () => undefined,
 });
 
 export function FavouritesPokemonProvider({
@@ -24,38 +22,30 @@ export function FavouritesPokemonProvider({
     []
   );
 
-  const validatePokemon = useCallback(
+  const isInFavourites = useCallback(
     (poke: Pokemon) => {
       return favouritesPokemons.some((p) => p.name === poke.name);
     },
     [favouritesPokemons]
   );
 
-  const addFavouritesPokemon = useCallback(
+  const addOrRemoveFromFavourites = useCallback(
     (poke: Pokemon) => {
-      if (!validatePokemon(poke)) {
-        setFavouritesPokemons([...favouritesPokemons, poke]);
-      }
+      isInFavourites(poke)
+        ? setFavouritesPokemons(
+            favouritesPokemons.filter((p) => p.name != poke.name)
+          )
+        : setFavouritesPokemons([...favouritesPokemons, poke]);
     },
-    [favouritesPokemons, validatePokemon]
-  );
-
-  const deleteFavouritePokemon = useCallback(
-    (poke: Pokemon) => {
-      if (validatePokemon(poke)) {
-        setFavouritesPokemons(favouritesPokemons.filter((p) => p != poke));
-      }
-    },
-    [favouritesPokemons, validatePokemon]
+    [favouritesPokemons, isInFavourites]
   );
 
   return (
     <FavouritesPokemonsContext.Provider
       value={{
         favouritesPokemons,
-        validatePokemon,
-        addFavouritesPokemon,
-        deleteFavouritePokemon,
+        isInFavourites,
+        addOrRemoveFromFavourites,
       }}
     >
       {children}

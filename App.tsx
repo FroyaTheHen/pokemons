@@ -4,12 +4,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { FavouritesPokemonProvider } from "./FavouritesContext";
 
 import useCachedResources from "./hooks/useCachedResources";
-import useColorScheme from "./hooks/useColorScheme";
+
 import Navigation from "./navigation/";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return null;
@@ -17,7 +16,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <FavouritesPokemonProvider>
-          <Navigation colorScheme={colorScheme} />
+          <Navigation />
           <StatusBar />
         </FavouritesPokemonProvider>
       </SafeAreaProvider>

@@ -1,18 +1,11 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  FlatList,
-  Button,
-  ActivityIndicator,
-} from "react-native";
-
+import { FlatList, ActivityIndicator, Pressable, Text } from "react-native";
+import { globalStyles, pokeGrey } from "../Styles";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import {
   Pokemon,
   fetchData,
-  generateIndexes,
   PokemonBaseResource,
   URL,
 } from "../pokemons/Pokemons";
@@ -29,78 +22,34 @@ function usePokemonList() {
   return data;
 }
 
-function TabPokemonListItem({
+export default function TabPokemonListScreen({
   navigation,
-}: {
-  navigation: RootTabScreenProps<"TabOne">["navigation"];
-}) {
+}: RootTabScreenProps<"PokeDetails">) {
   const base_pokemon_data = usePokemonList();
 
-  const renderItem = ({ item }: { item: Pokemon }) => (
-    <View style={styles.poke_button}>
-      <Button
+  const renderPokemon = ({ item }: { item: Pokemon }) => (
+    <View>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? pokeGrey : "white",
+          },
+          globalStyles.poke_button,
+        ]}
         onPress={() => {
           navigation.navigate("PokeDetails", { pokemon: item });
         }}
-        title={item.name.toLocaleUpperCase()}
-        color="black"
-      />
+      >
+        <Text style={globalStyles.title}>{item.name}</Text>
+      </Pressable>
     </View>
   );
+
   return base_pokemon_data ? (
     <View>
-      <FlatList
-        data={base_pokemon_data.results}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <FlatList data={base_pokemon_data.results} renderItem={renderPokemon} />
     </View>
   ) : (
     <ActivityIndicator />
   );
 }
-
-export default function TabPokemonListScreen({
-  navigation,
-}: RootTabScreenProps<"TabOne">) {
-  const renderItem = ({ item }: { item: number }) => (
-    <TabPokemonListItem navigation={navigation} />
-  );
-  const indexes: number[] = generateIndexes();
-
-  return (
-    <SafeAreaView>
-      <View>
-        <FlatList
-          data={indexes}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  poke_button: {
-    backgroundColor: "pink",
-    margin: 10,
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-  text: {
-    fontSize: 16,
-  },
-  wrapperCustom: {
-    borderRadius: 8,
-    padding: 6,
-  },
-});

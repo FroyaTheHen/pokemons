@@ -3,28 +3,20 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName } from "react-native";
 import TabPokemonListScreen from "../screens/PokemonListScreen";
 import TabPokemonDetailsScreen from "../screens/PokemonDetailsScreen";
-import TabPokemonFavouritesScreen from "../screens/PokemonFavourites";
+import TabPokemonFavouritesScreen from "../screens/PokemonFavouritesScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-export function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export function Navigation() {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-    >
+    <NavigationContainer linking={LinkingConfiguration}>
       <PokeStackNavigator />
     </NavigationContainer>
   );
@@ -60,7 +52,7 @@ function TabNav() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName = "";
 
           if (route.name === "Favourites") {
             iconName = focused ? "ios-heart" : "ios-heart-outline";
@@ -69,7 +61,7 @@ function TabNav() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "pink",
+        tabBarActiveTintColor: "blck",
         tabBarInactiveTintColor: "gray",
       })}
     >

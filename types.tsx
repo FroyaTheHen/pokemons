@@ -27,8 +27,8 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  TabOne: undefined;
-  TabTwo: { pokemon: Pokemon };
+  PokeList: undefined;
+  PokeDetails: { pokemon: Pokemon };
   TabThree: undefined;
 };
 
