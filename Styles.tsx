@@ -34,4 +34,7 @@ export const globalStyles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  poke_details_container: {
+    flexDirection: "row",
+  },
 });

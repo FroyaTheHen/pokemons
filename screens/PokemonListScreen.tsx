@@ -1,58 +1,64 @@
-import React, { useState } from "react";
-import { ActivityIndicator, Pressable, Text } from "react-native";
-import { globalStyles, pokeGrey } from "../Styles";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet } from "react-native";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-import {
-  Pokemon,
-  fetchData,
-  PokemonBaseResource,
-  URL,
-} from "../pokemons/Pokemons";
-import { useAsyncEffect } from "../utils";
+import { BASE_URL } from "../pokemons/Pokemons";
 import { Example } from "../SwipeablePokeRowComponent";
-export function usePokemonList() {
-  const [data, setData] = useState<PokemonBaseResource>();
-
-  useAsyncEffect(async () => {
-    const dataR = await fetchData<PokemonBaseResource>(URL);
-    setData(dataR);
-  }, []);
-
-  return data;
-}
 
 export default function TabPokemonListScreen({
   navigation,
 }: RootTabScreenProps<"PokeDetails">) {
-  const base_pokemon_data = usePokemonList();
+  const [pokeData, setPokeData] = useState([]);
+  const [offset, setOffset] = useState(20);
 
-  const renderPokemon = ({ item }: { item: Pokemon }) => (
-    <View>
-      <Pressable
-        style={({ pressed }) => [
-          {
-            backgroundColor: pressed ? pokeGrey : "white",
-          },
-          globalStyles.poke_button,
-        ]}
-        onPress={() => {
-          navigation.navigate("PokeDetails", { pokemon: item });
-        }}
-      >
-        <Text style={globalStyles.title}>{item.name}</Text>
-      </Pressable>
-    </View>
-  );
+  async function getPokeData<T>(): Promise<T> {
+    const response = await fetch(
+      `${BASE_URL}?limit=${offset}&offset=${offset}`
+    );
+    const res = await response.json();
+    setPokeData(res.results);
+    return res.results;
+  }
 
-  return base_pokemon_data ? (
+  useEffect(() => {
+    getPokeData();
+  }, [offset]);
+
+  const renderLoader = () => {
+    return (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator />
+      </View>
+    );
+  };
+
+  const loadMorePoke = () => {
+    setOffset(offset + 20);
+  };
+
+  return pokeData ? (
     <View>
       <Example
-        data={base_pokemon_data.results}
+        data={pokeData}
         navigation={navigation}
+        ListEmptyComponent={renderLoader}
+        onEndReached={loadMorePoke}
       ></Example>
     </View>
   ) : (
     <ActivityIndicator />
   );
 }
+
+const styles = StyleSheet.create({
+  itemWrapperStyle: {
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderColor: "#ddd",
+  },
+  loaderStyle: {
+    marginVertical: 60,
+    alignItems: "center",
+  },
+});

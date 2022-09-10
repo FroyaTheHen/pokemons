@@ -24,6 +24,7 @@ const Row = ({ item, navigation }: { item: Pokemon; navigation: any }) => (
 
 const SwipeableRow = ({
   item,
+  index,
   navigation,
 }: {
   item: Pokemon;
@@ -32,7 +33,7 @@ const SwipeableRow = ({
 }) => {
   return (
     <GmailStyleSwipeableRow pokemon={item}>
-      <Row item={item} navigation={navigation} />
+      <Row item={item} navigation={navigation} index={index} />
     </GmailStyleSwipeableRow>
   );
 };
@@ -45,13 +46,19 @@ export class Example extends Component {
           data={this.props.data}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={({ item, index }) => (
-            <SwipeableRow
-              item={item}
-              index={index}
-              navigation={this.props.navigation}
-            />
+            <View>
+              <Text>{"     " + index}</Text>
+              <SwipeableRow
+                item={item}
+                index={index}
+                navigation={this.props.navigation}
+              ></SwipeableRow>
+            </View>
           )}
           keyExtractor={(_item, index) => `message ${index}`}
+          ListEmptyComponent={this.props.ListEmptyComponent}
+          onEndReached={this.props.onEndReached}
+          onEndReachedThreshold={0}
         />
       </View>
     );
@@ -74,7 +81,6 @@ export const styles = StyleSheet.create({
   },
   fromText: {
     backgroundColor: "transparent",
-
     textTransform: "capitalize",
   },
 });

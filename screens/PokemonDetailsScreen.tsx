@@ -36,7 +36,7 @@ export default function TabPokemonDetailsScreen(params: Props) {
       <View style={globalStyles.poke_details_container}>
         <View>
           <Text style={globalStyles.poke_detail}>height: {pokemon.height}</Text>
-          <Text style={globalStyles.poke_detail}>lorem ipsum</Text>
+          <Text style={globalStyles.poke_detail}>lorem ipsum {pokemon.id}</Text>
         </View>
 
         <View>
