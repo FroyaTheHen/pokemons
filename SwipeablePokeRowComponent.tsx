@@ -59,6 +59,7 @@ export class Example extends Component {
           ListEmptyComponent={this.props.ListEmptyComponent}
           onEndReached={this.props.onEndReached}
           onEndReachedThreshold={0}
+          ListFooterComponent={this.props.listFooterComponent}
         />
       </View>
     );
@@ -74,6 +75,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     fontWeight: "bold",
     fontSize: 15,
+    backgroundColor: "white",
   },
   separator: {
     backgroundColor: "rgb(200, 199, 204)",
@@ -82,5 +84,8 @@ export const styles = StyleSheet.create({
   fromText: {
     backgroundColor: "transparent",
     textTransform: "capitalize",
+  },
+  xd: {
+    backgroundColor: "pink",
   },
 });
