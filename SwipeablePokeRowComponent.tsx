@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, I18nManager } from "react-native";
 
 import { FlatList, RectButton } from "react-native-gesture-handler";
+import { PokeActivityIndicator } from "./commonComponents/pokeActivityIndicator";
 
 import GmailStyleSwipeableRow from "./GmailStyleSwipeableRow";
 import { Pokemon } from "./pokemons/Pokemons";
@@ -47,7 +48,6 @@ export class Example extends Component {
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={({ item, index }) => (
             <View>
-              <Text>{"     " + index}</Text>
               <SwipeableRow
                 item={item}
                 index={index}
@@ -56,7 +56,7 @@ export class Example extends Component {
             </View>
           )}
           keyExtractor={(_item, index) => `message ${index}`}
-          ListEmptyComponent={this.props.ListEmptyComponent}
+          ListEmptyComponent={PokeActivityIndicator}
           onEndReached={this.props.onEndReached}
           onEndReachedThreshold={0}
           ListFooterComponent={this.props.listFooterComponent}
@@ -84,8 +84,5 @@ export const styles = StyleSheet.create({
   fromText: {
     backgroundColor: "transparent",
     textTransform: "capitalize",
-  },
-  xd: {
-    backgroundColor: "pink",
   },
 });

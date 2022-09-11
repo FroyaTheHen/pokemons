@@ -4,6 +4,7 @@ import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { BASE_URL } from "../pokemons/Pokemons";
 import { Example } from "../SwipeablePokeRowComponent";
+import { PokeActivityIndicator } from "../commonComponents/pokeActivityIndicator";
 
 const POKE_ON_PAGE_LIMIT: number = 20;
 
@@ -19,8 +20,6 @@ export default function TabPokemonListScreen({
       `${BASE_URL}?limit=${POKE_ON_PAGE_LIMIT}&offset=${offset}`
     );
     const res = await response.json();
-
-    console.log(res.count);
     setPokeDataCount(res.count);
     setPokeData(pokeData.concat(res.results));
     return res.results;
@@ -30,30 +29,17 @@ export default function TabPokemonListScreen({
     getPokeData();
   }, [offset]);
 
-  const renderLoader = () => {
-    return (
-      <View style={styles.loaderStyle}>
-        <ActivityIndicator />
-      </View>
-    );
-  };
-
   const loadMorePoke = () => {
     setOffset(offset + POKE_ON_PAGE_LIMIT);
-    console.log(offset);
   };
 
   const listFooterComponent = () => {
-    console.log(`offset = ${offset} // poke data count = ${pokeDataCount}`);
-
     return offset >= pokeDataCount ? (
       <View style={styles.rectButton}>
         <Text>Sorry Love, callected them all, already!</Text>
       </View>
     ) : (
-      <View style={styles.loaderStyle}>
-        <ActivityIndicator />
-      </View>
+      <PokeActivityIndicator />
     );
   };
 
@@ -62,7 +48,6 @@ export default function TabPokemonListScreen({
       <Example
         data={pokeData}
         navigation={navigation}
-        ListEmptyComponent={renderLoader}
         onEndReached={loadMorePoke}
         listFooterComponent={listFooterComponent}
       ></Example>
@@ -78,10 +63,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderColor: "#ddd",
-  },
-  loaderStyle: {
-    marginVertical: 60,
-    alignItems: "center",
   },
   rectButton: {
     flex: 1,
