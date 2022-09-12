@@ -1,25 +1,36 @@
 import React, { useContext } from "react";
-import { Text, FlatList } from "react-native";
+import { Text, FlatList, Pressable } from "react-native";
 import { FavouritesPokemonsContext } from "../FavouritesContext";
 import { View } from "../components/Themed";
 import { Pokemon } from "../pokemons/Pokemons";
-import { globalStyles } from "../Styles";
+import { globalStyles, pokeGrey } from "../Styles";
 import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
 import { styles } from "../SwipeablePokeRowComponent";
 
-export default function TabPokemonFavouritesScreen() {
+import { RootTabScreenProps } from "../types";
+
+export default function TabPokemonFavouritesScreen({
+  navigation,
+}: RootTabScreenProps<"PokeDetails">) {
   const { favouritesPokemons } = useContext(FavouritesPokemonsContext);
 
   const Item = ({ poke }: { poke: Pokemon }) => (
-    <View style={globalStyles.poke_button}>
-      <View style={globalStyles.poke_details_container}>
-        <View>
-          <Text style={globalStyles.title}>{poke.name} </Text>
-        </View>
-        <View>
-          <AddOrRemoveComponent poke={poke} />
-        </View>
-      </View>
+    <View>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? pokeGrey : "white",
+          },
+          globalStyles.poke_button,
+        ]}
+        onPress={() => {
+          navigation.navigate("PokeDetails", { pokemon: poke });
+        }}
+      >
+        <Text style={globalStyles.title}>{poke.name}</Text>
+
+        <AddOrRemoveComponent poke={poke} />
+      </Pressable>
     </View>
   );
 

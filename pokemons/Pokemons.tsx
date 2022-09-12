@@ -1,6 +1,6 @@
-export const URL = "https://pokeapi.co/api/v2/pokemon/";
+export const URL = "https://pokeapi.co/api/v2/pokemon?limit=10&offset=0";
 const DEFAULT_NUMBER_OF_POKEMONS = 6;
-export const BASE_URL = "https://pokeapi.co/api/v2/";
+export const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
 
 interface PokemonSprites {
   back_default: string;

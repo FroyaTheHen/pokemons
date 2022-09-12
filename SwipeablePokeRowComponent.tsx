@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, PropsWithChildren } from "react";
 import { StyleSheet, Text, View, I18nManager } from "react-native";
 
 import { FlatList, RectButton } from "react-native-gesture-handler";
+import { PokeActivityIndicator } from "./commonComponents/pokeActivityIndicator";
 
 import GmailStyleSwipeableRow from "./GmailStyleSwipeableRow";
 import { Pokemon } from "./pokemons/Pokemons";
@@ -10,8 +11,15 @@ import { globalStyles } from "./Styles";
 //  To toggle LTR/RTL change to `true`
 I18nManager.allowRTL(false);
 
-const Row = ({ item, navigation }: { item: Pokemon; navigation: any }) => (
-  // eslint-disable-next-line no-alert
+const Row = ({
+  item,
+  index, // eslint-disable-line
+  navigation,
+}: {
+  item: Pokemon;
+  index: number;
+  navigation: any;
+}) => (
   <RectButton
     style={(styles.rectButton, globalStyles.poke_button)}
     onPress={async () => {
@@ -24,6 +32,7 @@ const Row = ({ item, navigation }: { item: Pokemon; navigation: any }) => (
 
 const SwipeableRow = ({
   item,
+  index,
   navigation,
 }: {
   item: Pokemon;
@@ -32,12 +41,19 @@ const SwipeableRow = ({
 }) => {
   return (
     <GmailStyleSwipeableRow pokemon={item}>
-      <Row item={item} navigation={navigation} />
+      <Row item={item} navigation={navigation} index={index} />
     </GmailStyleSwipeableRow>
   );
 };
 
-export class Example extends Component {
+export class Example extends Component<
+  PropsWithChildren<{
+    onEndReached: any;
+    navigation: any;
+    listFooterComponent: any;
+    data: Array<Pokemon> | undefined;
+  }>
+> {
   render() {
     return (
       <View>
@@ -45,13 +61,19 @@ export class Example extends Component {
           data={this.props.data}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={({ item, index }) => (
-            <SwipeableRow
-              item={item}
-              index={index}
-              navigation={this.props.navigation}
-            />
+            <View>
+              <SwipeableRow
+                item={item}
+                index={index}
+                navigation={this.props.navigation}
+              ></SwipeableRow>
+            </View>
           )}
           keyExtractor={(_item, index) => `message ${index}`}
+          ListEmptyComponent={PokeActivityIndicator}
+          onEndReached={this.props.onEndReached}
+          onEndReachedThreshold={0}
+          ListFooterComponent={this.props.listFooterComponent}
         />
       </View>
     );
@@ -67,6 +89,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     fontWeight: "bold",
     fontSize: 15,
+    backgroundColor: "white",
   },
   separator: {
     backgroundColor: "rgb(200, 199, 204)",
@@ -74,7 +97,6 @@ export const styles = StyleSheet.create({
   },
   fromText: {
     backgroundColor: "transparent",
-
     textTransform: "capitalize",
   },
 });

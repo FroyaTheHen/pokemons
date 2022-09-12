@@ -7,7 +7,7 @@ export const globalStyles = StyleSheet.create({
     height: 80,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    flexDirection: "column",
+    flexDirection: "row",
     fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
@@ -22,9 +22,6 @@ export const globalStyles = StyleSheet.create({
     fontSize: 15,
     textTransform: "capitalize",
   },
-  poke_details_container: {
-    flexDirection: "row",
-  },
   poke_detail: {
     padding: 10,
   },
@@ -36,5 +33,8 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: "white",
     width: "100%",
     height: "100%",
+  },
+  poke_details_container: {
+    flexDirection: "row",
   },
 });
