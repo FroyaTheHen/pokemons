@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PropsWithChildren } from "react";
 import { StyleSheet, Text, View, I18nManager } from "react-native";
 
 import { FlatList, RectButton } from "react-native-gesture-handler";
@@ -11,8 +11,15 @@ import { globalStyles } from "./Styles";
 //  To toggle LTR/RTL change to `true`
 I18nManager.allowRTL(false);
 
-const Row = ({ item, navigation }: { item: Pokemon; navigation: any }) => (
-  // eslint-disable-next-line no-alert
+const Row = ({
+  item,
+  index, // eslint-disable-line
+  navigation,
+}: {
+  item: Pokemon;
+  index: number;
+  navigation: any;
+}) => (
   <RectButton
     style={(styles.rectButton, globalStyles.poke_button)}
     onPress={async () => {
@@ -39,7 +46,14 @@ const SwipeableRow = ({
   );
 };
 
-export class Example extends Component {
+export class Example extends Component<
+  PropsWithChildren<{
+    onEndReached: any;
+    navigation: any;
+    listFooterComponent: any;
+    data: Array<Pokemon> | undefined;
+  }>
+> {
   render() {
     return (
       <View>

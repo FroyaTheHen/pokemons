@@ -36,7 +36,7 @@ export default function TabPokemonListScreen({
   const listFooterComponent = () => {
     return offset >= pokeDataCount ? (
       <View style={styles.rectButton}>
-        <Text>Sorry Love, callected them all, already!</Text>
+        <Text>Sorry Love, caught them all!</Text>
       </View>
     ) : (
       <PokeActivityIndicator />
