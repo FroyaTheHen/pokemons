@@ -1,21 +1,40 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   SafeAreaView,
   Text,
   Image,
   ActivityIndicator,
+  Button,
+  Pressable,
 } from "react-native";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { fetchData, Pokemon } from "../pokemons/Pokemons";
 import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
-import { globalStyles } from "../Styles";
+import { globalStyles, pokeGrey } from "../Styles";
 import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
 type Props = NativeStackScreenProps<RootTabParamList, "PokeDetails">;
 
 export default function TabPokemonDetailsScreen(params: Props) {
   const [pokemon, setPokemon] = useState<Pokemon>();
+  const [gender, setGender] = useState("M");
+
+  const changeGender = () => {
+    gender === "M" ? setGender("F") : setGender("M");
+  };
+
+  const getPokeImg = () => {
+    return gender === "M"
+      ? pokemon?.sprites.front_shiny
+      : pokemon?.sprites.front_shiny_female;
+  };
+
+  useEffect(() => {
+    getPokeImg();
+  }, [gender]);
 
   useAsyncEffect(async () => {
     const _pokemon = await fetchData<Pokemon>(params.route.params.pokemon.url);
@@ -28,10 +47,24 @@ export default function TabPokemonDetailsScreen(params: Props) {
 
       <Image
         source={{
-          uri: pokemon.sprites.front_shiny,
+          uri: getPokeImg(),
         }}
         style={{ width: 300, height: 300 }}
       />
+      <Pressable onPress={changeGender}>
+        <Text>
+          <Ionicons
+            name={"ios-male"}
+            size={25}
+            color={gender === "M" ? "black" : pokeGrey}
+          />
+          <Ionicons
+            name={"ios-female"}
+            size={25}
+            color={gender === "F" ? "black" : pokeGrey}
+          />
+        </Text>
+      </Pressable>
 
       <View style={globalStyles.poke_details_container}>
         <View>
