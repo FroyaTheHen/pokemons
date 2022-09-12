@@ -15,12 +15,12 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          PokeList: {
             screens: {
               TabPokemonListScreen: 'one',
             },
           },
-          TabTwo: {
+          PokeDetails: {
             screens: {
               TabPokemonDetailsScreen: 'two',
             },

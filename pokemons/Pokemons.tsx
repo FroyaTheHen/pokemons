@@ -3,9 +3,12 @@ const DEFAULT_NUMBER_OF_POKEMONS = 6;
 export const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
 
 interface PokemonSprites {
+  front_default: string;
   back_default: string;
   front_shiny: string;
   back_shiny: string;
+  front_shiny_female: string;
+  back_shiny_female: string;
 }
 
 export interface Pokemon {
@@ -18,7 +21,7 @@ export interface Pokemon {
   base_experience: number;
 }
 
-interface PokeBase {
+export interface PokeBase {
   name: string;
   url: string;
 }

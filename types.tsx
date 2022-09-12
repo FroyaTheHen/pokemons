@@ -9,7 +9,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Pokemon } from "./pokemons/Pokemons";
+import { Pokemon, PokeBase } from "./pokemons/Pokemons";
 
 declare global {
   namespace ReactNavigation {
@@ -28,7 +28,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type RootTabParamList = {
   PokeList: undefined;
-  PokeDetails: { pokemon: Pokemon };
+  PokeDetails: { pokemon: Pokemon | PokeBase };
   TabThree: undefined;
 };
 

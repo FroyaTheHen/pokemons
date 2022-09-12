@@ -20,6 +20,7 @@ export default function TabPokemonListScreen({
       `${BASE_URL}?limit=${POKE_ON_PAGE_LIMIT}&offset=${offset}`
     );
     const res = await response.json();
+    // consider updating number of reults only once at the begining
     setPokeDataCount(res.count);
     setPokeData(pokeData.concat(res.results));
     return res.results;
@@ -27,7 +28,7 @@ export default function TabPokemonListScreen({
 
   useEffect(() => {
     getPokeData();
-  }, [offset]);
+  }, [offset]); // eslint-disable-line
 
   const loadMorePoke = () => {
     setOffset(offset + POKE_ON_PAGE_LIMIT);
