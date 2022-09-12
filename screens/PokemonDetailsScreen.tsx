@@ -12,13 +12,13 @@ import { RootTabParamList } from "../types";
 import { useAsyncEffect } from "../utils";
 import { globalStyles } from "../Styles";
 import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
-type Props = NativeStackScreenProps<RootTabParamList, "TabTwo">;
+type Props = NativeStackScreenProps<RootTabParamList, "PokeDetails">;
 
 export default function TabPokemonDetailsScreen(params: Props) {
   const [pokemon, setPokemon] = useState<Pokemon>();
 
   useAsyncEffect(async () => {
-    const _pokemon = await fetchData<Pokemon>(params.route.params.pokemon?.url);
+    const _pokemon = await fetchData<Pokemon>(params.route.params.pokemon.url);
     setPokemon(_pokemon);
   }, [params.route.params.pokemon]);
 
