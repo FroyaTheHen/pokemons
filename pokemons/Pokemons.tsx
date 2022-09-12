@@ -21,7 +21,7 @@ export interface Pokemon {
   base_experience: number;
 }
 
-interface PokeBase {
+export interface PokeBase {
   name: string;
   url: string;
 }

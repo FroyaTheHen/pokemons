@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   ActivityIndicator,
-  Button,
   Pressable,
 } from "react-native";
 
@@ -21,6 +20,7 @@ type Props = NativeStackScreenProps<RootTabParamList, "PokeDetails">;
 export default function TabPokemonDetailsScreen(params: Props) {
   const [pokemon, setPokemon] = useState<Pokemon>();
   const [gender, setGender] = useState("M");
+  const pokeUrl = params.route.params.pokemon.url;
 
   const changeGender = () => {
     gender === "M" ? setGender("F") : setGender("M");
@@ -37,7 +37,8 @@ export default function TabPokemonDetailsScreen(params: Props) {
   }, [gender]);
 
   useAsyncEffect(async () => {
-    const _pokemon = await fetchData<Pokemon>(params.route.params.pokemon.url);
+    const _pokemon = await fetchData<Pokemon>(pokeUrl);
+    _pokemon.url = pokeUrl;
     setPokemon(_pokemon);
   }, [params.route.params.pokemon]);
 
