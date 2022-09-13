@@ -5,8 +5,11 @@ import { Animated, StyleSheet, I18nManager, View, Text } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import { FavouritesPokemonsContext } from "./FavouritesContext";
 import { Pokemon } from "./pokemons/Pokemons";
+import {
+  isInFavourites,
+  saveToOrRemoveFromFavourites,
+} from "./storage/PokeStorage";
 import { pokeGrey } from "./Styles";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -14,10 +17,6 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 export default class GmailStyleSwipeableRow extends Component<
   PropsWithChildren<{ pokemon: Pokemon }>
 > {
-  context!: React.ContextType<typeof FavouritesPokemonsContext>;
-
-  static contextType = FavouritesPokemonsContext;
-
   private renderLeftActions = (
     _progress: Animated.AnimatedInterpolation,
     dragX: Animated.AnimatedInterpolation
@@ -27,7 +26,7 @@ export default class GmailStyleSwipeableRow extends Component<
       outputRange: [0, 1],
       extrapolate: "clamp",
     });
-    if (!this.context.isInFavourites(this.props.pokemon)) {
+    if (!isInFavourites(this.props.pokemon.name)) {
       return undefined;
     } else {
       return (
@@ -41,6 +40,7 @@ export default class GmailStyleSwipeableRow extends Component<
       );
     }
   };
+
   private renderRightActions = (
     _progress: Animated.AnimatedInterpolation,
     dragX: Animated.AnimatedInterpolation
@@ -50,7 +50,7 @@ export default class GmailStyleSwipeableRow extends Component<
       outputRange: [1, 0],
       extrapolate: "clamp",
     });
-    if (this.context.isInFavourites(this.props.pokemon)) {
+    if (!!isInFavourites(this.props.pokemon.name)) {
       return undefined;
     } else {
       return (
@@ -75,7 +75,7 @@ export default class GmailStyleSwipeableRow extends Component<
   };
 
   addOrRemoveFromFavourites = () => {
-    this.context.addOrRemoveFromFavourites(this.props.pokemon);
+    saveToOrRemoveFromFavourites(this.props.pokemon);
   };
 
   render() {

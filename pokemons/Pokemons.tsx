@@ -19,6 +19,7 @@ export interface Pokemon {
   height: number;
   weight: number;
   base_experience: number;
+  object_type_storage_id: string;
 }
 
 export interface PokeBase {

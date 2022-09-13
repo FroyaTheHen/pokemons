@@ -59,7 +59,7 @@ export class Example extends Component<
       <View>
         <FlatList
           data={this.props.data}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ItemSeparatorComponent={() => <View style={globalStyles.separator} />}
           renderItem={({ item, index }) => (
             <View>
               <SwipeableRow
@@ -90,10 +90,6 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
     backgroundColor: "white",
-  },
-  separator: {
-    backgroundColor: "rgb(200, 199, 204)",
-    height: StyleSheet.hairlineWidth,
   },
   fromText: {
     backgroundColor: "transparent",

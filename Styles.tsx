@@ -37,4 +37,8 @@ export const globalStyles = StyleSheet.create({
   poke_details_container: {
     flexDirection: "row",
   },
+  separator: {
+    backgroundColor: "rgb(200, 199, 204)",
+    height: StyleSheet.hairlineWidth,
+  },
 });
