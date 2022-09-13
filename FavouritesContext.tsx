@@ -22,7 +22,7 @@ export function FavouritesPokemonProvider({
     []
   );
 
-  const isInFavourites = useCallback(
+  const isInFavouritesContext = useCallback(
     (poke: Pokemon) => {
       return favouritesPokemons.some((p) => p.name === poke.name);
     },
@@ -31,20 +31,20 @@ export function FavouritesPokemonProvider({
 
   const addOrRemoveFromFavourites = useCallback(
     (poke: Pokemon) => {
-      isInFavourites(poke)
+      isInFavouritesContext(poke)
         ? setFavouritesPokemons(
             favouritesPokemons.filter((p) => p.name != poke.name)
           )
         : setFavouritesPokemons([...favouritesPokemons, poke]);
     },
-    [favouritesPokemons, isInFavourites]
+    [favouritesPokemons, isInFavouritesContext]
   );
 
   return (
     <FavouritesPokemonsContext.Provider
       value={{
         favouritesPokemons,
-        isInFavourites,
+        isInFavouritesContext,
         addOrRemoveFromFavourites,
       }}
     >

@@ -6,13 +6,11 @@ export const savePokemonToFavourites = async (pokemon: Pokemon) => {
     // store values with some meaning so the Storage can be used in different cases as well
     pokemon.object_type_storage_id = "FAVOURITE_POKEMON";
     const jsonValue = JSON.stringify(pokemon);
-    console.log(jsonValue);
     await AsyncStorage.setItem(pokemon.name, jsonValue);
   } catch (e) {
     // saving error
     console.log(e);
   }
-  console.log("stored " + pokemon.name);
 };
 
 export const retrieveFavouritePokemon = async (pokemonName: string) => {
@@ -33,7 +31,6 @@ export const retrieveAllFavouritesPokemons = async () => {
     // the logic must be refined to make the storage reusable
     const all_keys = await AsyncStorage.getAllKeys();
     const values = await AsyncStorage.multiGet([...all_keys]);
-
     return values;
   } catch (e) {
     console.log(e);
@@ -56,18 +53,14 @@ export function parseToPokemonArray(data: any) {
 export const removePokemonFromFavourites = async (pokemon: Pokemon) => {
   try {
     await AsyncStorage.removeItem(pokemon.name);
-    console.log("removed form fav: " + pokemon.name);
   } catch (e) {
     console.log(e);
   }
-
-  console.log("Done.");
 };
 
 export async function isInFavourites(pokemonName: string) {
   try {
     const pokemon = await AsyncStorage.getItem(pokemonName);
-    // console.log("is in fav" + pokemon);
     return pokemon ? true : false;
   } catch (e) {
     console.log(e);
@@ -79,12 +72,10 @@ export const saveToOrRemoveFromFavourites = async (pokemon: Pokemon) => {
   if (_isInFavourites) {
     try {
       await AsyncStorage.removeItem(pokemon.name);
-      console.log("removed form fav: " + pokemon.name);
     } catch (e) {
       console.log(e);
     }
   } else {
     savePokemonToFavourites(pokemon);
-    console.log("added to fav: " + pokemon.name);
   }
 };
