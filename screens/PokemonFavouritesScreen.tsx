@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Text, FlatList, Pressable, ActivityIndicator } from "react-native";
+import {
+  Text,
+  FlatList,
+  Pressable,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import { View } from "../components/Themed";
 
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { Pokemon } from "../pokemons/Pokemons";
 import { globalStyles, pokeGrey } from "../Styles";
-import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
 
 import { RootTabScreenProps } from "../types";
 import {
@@ -39,6 +45,24 @@ export default function TabPokemonFavouritesScreen({
   };
 
   const Item = ({ poke }: { poke: Pokemon }) => {
+    const [statusChanged, setStatusChanged] = useState(style.poke_button);
+
+    const Component = () => {
+      return (
+        <View>
+          <Pressable
+            onPress={() => {
+              setStatusChanged(style.hide_poke_button);
+            }}
+          >
+            <Text>
+              {<Ionicons name={"ios-heart"} size={25} color={pokeGrey} />}
+            </Text>
+          </Pressable>
+        </View>
+      );
+    };
+
     return (
       <View>
         <Pressable
@@ -46,15 +70,14 @@ export default function TabPokemonFavouritesScreen({
             {
               backgroundColor: pressed ? pokeGrey : "white",
             },
-            globalStyles.poke_button,
+            statusChanged,
           ]}
           onPress={() => {
             navigation.navigate("PokeDetails", { pokemon: poke });
           }}
         >
           <Text style={globalStyles.title}>{poke.name}</Text>
-
-          <AddOrRemoveComponent poke={poke} />
+          <Component />
         </Pressable>
       </View>
     );
@@ -64,3 +87,19 @@ export default function TabPokemonFavouritesScreen({
 
   return <FavPoke></FavPoke>;
 }
+
+export const style = StyleSheet.create({
+  poke_button: {
+    flex: 1,
+    height: 80,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    fontWeight: "bold",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  hide_poke_button: {
+    display: "none",
+  },
+});
