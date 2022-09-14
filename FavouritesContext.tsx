@@ -1,5 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Pokemon } from "./pokemons/Pokemons";
+import {
+  removePokemonFromFavourites,
+  savePokemonToFavourites,
+  retrieveAllFavouritesPokemons,
+  parseToPokemonArray,
+} from "./PokeStorage";
 
 interface Pikapika {
   favouritesPokemons: Array<Pokemon>;
@@ -22,6 +28,13 @@ export function FavouritesPokemonProvider({
     []
   );
 
+  useEffect(() => {
+    retrieveAllFavouritesPokemons().then((poke) => {
+      const pokemons: Array<Pokemon> = parseToPokemonArray(poke);
+      setFavouritesPokemons(pokemons);
+    });
+  }, []);
+
   const isInFavourites = useCallback(
     (poke: Pokemon) => {
       return favouritesPokemons.some((p) => p.name === poke.name);
@@ -32,10 +45,12 @@ export function FavouritesPokemonProvider({
   const addOrRemoveFromFavourites = useCallback(
     (poke: Pokemon) => {
       isInFavourites(poke)
-        ? setFavouritesPokemons(
+        ? (setFavouritesPokemons(
             favouritesPokemons.filter((p) => p.name != poke.name)
-          )
-        : setFavouritesPokemons([...favouritesPokemons, poke]);
+          ),
+          removePokemonFromFavourites(poke))
+        : (setFavouritesPokemons([...favouritesPokemons, poke]),
+          savePokemonToFavourites(poke));
     },
     [favouritesPokemons, isInFavourites]
   );
