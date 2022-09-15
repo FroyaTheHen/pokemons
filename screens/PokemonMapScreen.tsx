@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,12 +8,28 @@ import {
   TextInput,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
-
+import { block } from "react-native-reanimated";
+import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
+import { PokemonLocation } from "../pokemons/Pokemons";
 export default function TabPokemonMapScreen({
   navigation,
 }: {
   navigation: any;
 }) {
+  const { pokemonsLocations, addPokemonLocation } = useContext(
+    PokemonsLocationsContext
+  );
+
+  const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
+
+  function getMarkedLocations() {
+    return markedLocations.toString();
+  }
+
+  useEffect(() => {
+    getMarkedLocations();
+  }, [markedLocations]); // eslint-disable-line
+
   const [region, setRegion] = useState({
     latitude: 51.5079145,
     longitude: -0.0899163,
@@ -22,22 +38,39 @@ export default function TabPokemonMapScreen({
   });
   const [pin, setPin] = useState();
 
-  //   useEffect(() => {
-  //     console.log("dropped at: ");
-  //     console.log(pin);
-  //   }, [pin]);
+  const [pokemon, setPokemon] = useState({
+    name: "bulbasaur",
+    url: "https://pokeapi.co/api/v2/pokemon/1/",
+  });
+
+  const SavePin = () => {
+    return (
+      <View style={styles.poke_container}>
+        <Pressable
+          onPress={() => {
+            addPokemonLocation(pokemon.name, pin);
+            let l = { name: pokemon.name, location: pin };
+            setMarkedLocations([...markedLocations, l]);
+          }}
+        >
+          <Text>save pin</Text>
+        </Pressable>
+      </View>
+    );
+  };
 
   const DropPin = () => {
-    const [text, onChangeText] = React.useState("Useless Text");
-
+    // but maybe make the input or a poke list of names or whever and the save b. drop down
+    // only after the pin is dropped - that would be an elegent solution
     return (
-      <View>
-        <Button
-          title="popopo"
+      <View style={styles.poke_container}>
+        <Pressable
           onPress={() => {
             setPin(region);
           }}
-        />
+        >
+          <Text>drop pin</Text>
+        </Pressable>
       </View>
     );
   };
@@ -47,9 +80,6 @@ export default function TabPokemonMapScreen({
       <Marker
         coordinate={pin}
         draggable={true}
-        // onDragEnd={(region) => {
-        //   console.log(region);
-        // }}
         onDragEnd={(e) => {
           console.log(e.nativeEvent.coordinate);
           setPin(e.nativeEvent.coordinate);
@@ -74,20 +104,55 @@ export default function TabPokemonMapScreen({
         }}
       >
         <MarkerComponent />
-        <DropPin />
+        <Marker
+          coordinate={{
+            latitude: 37.79032477931035,
+            longitude: -122.43240052571046,
+          }}
+        />
       </MapView>
+      <DropPin />
+      <SavePin />
+
+      <Text>
+        {getMarkedLocations()}
+        dscd
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
     flex: 1, //the container will fill the whole screen.
     justifyContent: "flex-end",
     alignItems: "center",
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  poke_container: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    height: 30,
+    width: 100,
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  poke_butt: {
+    backgroundColor: "pink",
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    flexDirection: "column",
+    width: 200,
+  },
+  item: {
+    width: 100,
   },
 });

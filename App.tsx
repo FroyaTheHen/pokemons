@@ -2,7 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { FavouritesPokemonProvider } from "./FavouritesContext";
+import { FavouritesPokemonProvider } from "./contexts/FavouritesContext";
+import { PokemonsLocationProvider } from "./contexts/PokeLocationContext";
 
 import useCachedResources from "./hooks/useCachedResources";
 
@@ -18,8 +19,10 @@ export default function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
           <FavouritesPokemonProvider>
-            <Navigation />
-            <StatusBar />
+            <PokemonsLocationProvider>
+              <Navigation />
+              <StatusBar />
+            </PokemonsLocationProvider>
           </FavouritesPokemonProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>

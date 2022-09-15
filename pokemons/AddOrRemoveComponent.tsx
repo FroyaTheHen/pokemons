@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Text, Pressable } from "react-native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { FavouritesPokemonsContext } from "../FavouritesContext";
+import { FavouritesPokemonsContext } from "../contexts/FavouritesContext";
 import { pokeGrey } from "../Styles";
 import { Pokemon } from "./Pokemons";
 
