@@ -6,6 +6,7 @@ import { Pokemon } from "../pokemons/Pokemons";
 import { globalStyles, pokeGrey } from "../Styles";
 import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
 import { styles } from "../SwipeablePokeRowComponent";
+import PokemonsLocationsContext from "../contexts/PokeLocationContext";
 
 export default function TabPokemonFavouritesScreen({
   navigation,
@@ -13,6 +14,7 @@ export default function TabPokemonFavouritesScreen({
   navigation: any;
 }) {
   const { favouritesPokemons } = useContext(FavouritesPokemonsContext);
+  const { pokemonsLocations } = useContext(PokemonsLocationsContext);
 
   const Item = ({ poke }: { poke: Pokemon }) => (
     <View>
@@ -36,11 +38,23 @@ export default function TabPokemonFavouritesScreen({
 
   const renderItem = ({ item }: { item: Pokemon }) => <Item poke={item} />;
 
+  const renderLocation = ({ item }) => (
+    <View style={{ backgroundColor: "pink", height: 100, marginBottom: 10 }}>
+      <Text>{JSON.stringify(item)}</Text>
+    </View>
+  );
+
   return (
     <View style={globalStyles.whiteBack}>
       <FlatList
         data={favouritesPokemons}
         renderItem={renderItem}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
+
+      <FlatList
+        data={pokemonsLocations}
+        renderItem={renderLocation}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </View>

@@ -1,16 +1,21 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Point } from "react-native-maps";
 import { PokemonLocation } from "../pokemons/Pokemons";
+import {
+  savePokemonLocationToStorage,
+  retrieveAllPokemonsLocations,
+  parseToPokemonLocationsArray,
+} from "../PokeStorage";
 
 interface PokemonsLocationsInterface {
   pokemonsLocations: Array<PokemonLocation>;
-  addPokemonLocation: (point: Point, pokemonName: string) => void;
+  addPokemonLocation: (newPokemonLocation: PokemonLocation) => void;
 }
 
 export const PokemonsLocationsContext =
   React.createContext<PokemonsLocationsInterface>({
     pokemonsLocations: [],
-    addPokemonLocation: () => undefined,
+    addPokemonLocation: (newPokemonLocation: PokemonLocation) => undefined,
   });
 
 export function PokemonsLocationProvider({
@@ -22,12 +27,30 @@ export function PokemonsLocationProvider({
     Array<PokemonLocation>
   >([]);
 
+  useEffect(() => {
+    retrieveAllPokemonsLocations().then((data) => {
+      const allPokemonsLocations: Array<PokemonLocation> =
+        parseToPokemonLocationsArray(data);
+      setPokemonsLocations(allPokemonsLocations);
+    });
+  }, []);
+
   const addPokemonLocation = useCallback(
-    (point: Point, pokemonName: string) => {
-      const newPokemonLocation = { location: point, name: pokemonName };
+    (newPokemonLocation: PokemonLocation) => {
       setPokemonsLocations([...pokemonsLocations, newPokemonLocation]);
-      console.log("context: saved poke location" + newPokemonLocation);
       console.log(pokemonsLocations);
+      savePokemonLocationToStorage(newPokemonLocation);
+
+      // console.log(
+      //   "context: saved poke location: " +
+      //     newPokemonLocation.name +
+      //     " / " +
+      //     newPokemonLocation.latitude +
+      //     " / " +
+      //     newPokemonLocation.longitude +
+      //     "   /   " +
+      //     JSON.stringify(newPokemonLocation)
+      // );
     },
     [pokemonsLocations]
   );

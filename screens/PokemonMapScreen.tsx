@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useEffect, useState } from "react";
 import {
   View,
@@ -11,6 +12,7 @@ import MapView, { Marker } from "react-native-maps"; // remove PROVIDER_GOOGLE i
 import { block } from "react-native-reanimated";
 import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
 import { PokemonLocation } from "../pokemons/Pokemons";
+// import { PokemonLocation } from "../pokemons/Pokemons";
 export default function TabPokemonMapScreen({
   navigation,
 }: {
@@ -23,18 +25,21 @@ export default function TabPokemonMapScreen({
   const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
 
   function getMarkedLocations() {
-    return markedLocations.toString();
+    let hyperString = "";
+    markedLocations.forEach((e) => {
+      hyperString = hyperString + " // " + JSON.stringify(e);
+    });
+
+    return hyperString;
   }
 
   useEffect(() => {
     getMarkedLocations();
-  }, [markedLocations]); // eslint-disable-line
+  }, [markedLocations]);
 
   const [region, setRegion] = useState({
     latitude: 51.5079145,
     longitude: -0.0899163,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
   });
   const [pin, setPin] = useState();
 
@@ -48,9 +53,13 @@ export default function TabPokemonMapScreen({
       <View style={styles.poke_container}>
         <Pressable
           onPress={() => {
-            addPokemonLocation(pokemon.name, pin);
-            let l = { name: pokemon.name, location: pin };
-            setMarkedLocations([...markedLocations, l]);
+            const newPl: PokemonLocation = {
+              name: pokemon.name,
+              latitude: pin.latitude,
+              longitude: pin.longitude,
+            };
+            addPokemonLocation(newPl);
+            setMarkedLocations([...markedLocations, JSON.stringify(newPl)]);
           }}
         >
           <Text>save pin</Text>
@@ -116,6 +125,7 @@ export default function TabPokemonMapScreen({
 
       <Text>
         {getMarkedLocations()}
+        {/* {markedLocations} */}
         dscd
       </Text>
     </View>

@@ -51,7 +51,8 @@ export function generateIndexes(count: number = DEFAULT_NUMBER_OF_POKEMONS) {
 
 export interface PokemonLocation {
   name: string;
-  location: Point;
+  latitude: number;
+  longitude: number;
 }
 
 export interface Point {
