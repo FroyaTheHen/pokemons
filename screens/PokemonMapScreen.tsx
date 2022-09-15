@@ -1,15 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useContext, useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Pressable,
-  Button,
-  TextInput,
-} from "react-native";
+import React, { useContext, useState } from "react";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import MapView, { Marker } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
-import { block } from "react-native-reanimated";
 import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
 import { PokemonLocation } from "../pokemons/Pokemons";
 // import { PokemonLocation } from "../pokemons/Pokemons";
@@ -24,18 +15,18 @@ export default function TabPokemonMapScreen({
 
   const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
 
-  function getMarkedLocations() {
-    let hyperString = "";
-    markedLocations.forEach((e) => {
-      hyperString = hyperString + " // " + JSON.stringify(e);
-    });
-
-    return hyperString;
-  }
-
-  useEffect(() => {
-    getMarkedLocations();
-  }, [markedLocations]);
+  const renderPokeMarkerComponent = (pokeLocation: PokemonLocation) => {
+    return (
+      <Marker
+        coordinate={{
+          latitude: pokeLocation.latitude,
+          longitude: pokeLocation.longitude,
+        }}
+        description={pokeLocation.name}
+        // title={"HOPsasa"}
+      />
+    );
+  };
 
   const [region, setRegion] = useState({
     latitude: 51.5079145,
@@ -59,7 +50,7 @@ export default function TabPokemonMapScreen({
               longitude: pin.longitude,
             };
             addPokemonLocation(newPl);
-            setMarkedLocations([...markedLocations, JSON.stringify(newPl)]);
+            setMarkedLocations([...markedLocations, newPl]);
           }}
         >
           <Text>save pin</Text>
@@ -119,15 +110,28 @@ export default function TabPokemonMapScreen({
             longitude: -122.43240052571046,
           }}
         />
+        <Marker
+          coordinate={{
+            latitude: 37.79032477931035,
+            longitude: -122.43240052571046,
+          }}
+        />
+
+        {markedLocations.map((l, index) => (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: l.latitude,
+              longitude: l.longitude,
+            }}
+            description={l.name}
+          />
+        ))}
       </MapView>
       <DropPin />
       <SavePin />
 
-      <Text>
-        {getMarkedLocations()}
-        {/* {markedLocations} */}
-        dscd
-      </Text>
+      <Text>dscd</Text>
     </View>
   );
 }

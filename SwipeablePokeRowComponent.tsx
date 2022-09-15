@@ -89,7 +89,6 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     fontWeight: "bold",
     fontSize: 15,
-    backgroundColor: "white",
   },
   separator: {
     backgroundColor: "rgb(200, 199, 204)",

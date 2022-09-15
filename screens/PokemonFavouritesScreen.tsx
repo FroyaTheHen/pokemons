@@ -40,7 +40,10 @@ export default function TabPokemonFavouritesScreen({
 
   const renderLocation = ({ item }) => (
     <View style={{ backgroundColor: "pink", height: 100, marginBottom: 10 }}>
-      <Text>{JSON.stringify(item)}</Text>
+      {/* <Text>
+        {JSON.stringify(item)}
+        __{item.name}__{typeof item.latitude}__{item.longitude}
+      </Text> */}
     </View>
   );
 
@@ -52,11 +55,11 @@ export default function TabPokemonFavouritesScreen({
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
 
-      <FlatList
+      {/* <FlatList
         data={pokemonsLocations}
         renderItem={renderLocation}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      /> */}
     </View>
   );
 }
