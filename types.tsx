@@ -29,7 +29,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   PokeList: undefined;
   PokeDetails: { pokemon: Pokemon | PokeBase };
-  TabThree: undefined;
+  PokeMap: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

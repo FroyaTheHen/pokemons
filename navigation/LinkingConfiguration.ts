@@ -25,6 +25,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               TabPokemonDetailsScreen: 'two',
             },
           },
+          PokeMap: {
+            screens: {
+              TabPokemonMapScreen: 'three',
+            },
+          },
         },
       },
       Modal: 'modal',
