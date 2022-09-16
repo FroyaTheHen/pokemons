@@ -40,17 +40,6 @@ export function PokemonsLocationProvider({
       setPokemonsLocations([...pokemonsLocations, newPokemonLocation]);
       console.log(pokemonsLocations);
       savePokemonLocationToStorage(newPokemonLocation);
-
-      // console.log(
-      //   "context: saved poke location: " +
-      //     newPokemonLocation.name +
-      //     " / " +
-      //     newPokemonLocation.latitude +
-      //     " / " +
-      //     newPokemonLocation.longitude +
-      //     "   /   " +
-      //     JSON.stringify(newPokemonLocation)
-      // );
     },
     [pokemonsLocations]
   );

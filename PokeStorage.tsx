@@ -57,7 +57,6 @@ export const savePokemonLocationToStorage = async (
         pokemonLocation.longitude,
       jsonValue
     );
-    console.log("storagde - done  --->   " + jsonValue);
   } catch (e) {
     console.log(e);
   }

@@ -1,9 +1,16 @@
-import React, { useContext, useState } from "react";
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
 import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
-import { PokemonLocation } from "../pokemons/Pokemons";
-// import { PokemonLocation } from "../pokemons/Pokemons";
+import { PokemonLocation, BASE_URL } from "../pokemons/Pokemons";
+import Autocomplete from "react-native-autocomplete-input";
+
 export default function TabPokemonMapScreen({
   navigation,
 }: {
@@ -23,7 +30,6 @@ export default function TabPokemonMapScreen({
           longitude: pokeLocation.longitude,
         }}
         description={pokeLocation.name}
-        // title={"HOPsasa"}
       />
     );
   };
@@ -39,9 +45,16 @@ export default function TabPokemonMapScreen({
     url: "https://pokeapi.co/api/v2/pokemon/1/",
   });
 
+  // show either one of the pressables - switch on each click
+  const [savePinDisplay, setSavePinDisplay] = useState(false);
+  const [dropPinDisplay, setDropPinDisplay] = useState(true);
+
   const SavePin = () => {
     return (
-      <View style={styles.poke_container}>
+      <View
+        style={savePinDisplay ? styles.save_pin_view : styles.dontDisplayMe}
+      >
+        <AutoCompletePoke />
         <Pressable
           onPress={() => {
             const newPl: PokemonLocation = {
@@ -51,6 +64,8 @@ export default function TabPokemonMapScreen({
             };
             addPokemonLocation(newPl);
             setMarkedLocations([...markedLocations, newPl]);
+            setDropPinDisplay(!dropPinDisplay);
+            setSavePinDisplay(!savePinDisplay);
           }}
         >
           <Text>save pin</Text>
@@ -63,10 +78,14 @@ export default function TabPokemonMapScreen({
     // but maybe make the input or a poke list of names or whever and the save b. drop down
     // only after the pin is dropped - that would be an elegent solution
     return (
-      <View style={styles.poke_container}>
+      <View
+        style={dropPinDisplay ? styles.drop_pin_view : styles.dontDisplayMe}
+      >
         <Pressable
           onPress={() => {
             setPin(region);
+            setDropPinDisplay(!dropPinDisplay);
+            setSavePinDisplay(!savePinDisplay);
           }}
         >
           <Text>drop pin</Text>
@@ -86,6 +105,72 @@ export default function TabPokemonMapScreen({
         }}
       />
     ) : null;
+  };
+
+  const AutoCompletePoke = () => {
+    const [MainJSON, setMainJSON] = useState([]);
+    const [FilterData, setFilterData] = useState([]);
+    const [selectedItem, setselectedItem] = useState({});
+
+    async function getPokeData<T>(): Promise<T> {
+      const response = await fetch(`${BASE_URL}?limit=${20}&offset=${20}`);
+      const res = await response.json();
+      setMainJSON(res.results);
+    }
+
+    useEffect(() => {
+      getPokeData();
+    }, []);
+
+    const SearchDataFromJSON = (query) => {
+      if (query) {
+        //Making the Search as Case Insensitive.
+        const regex = new RegExp(`${query.trim()}`, "i");
+        setFilterData(MainJSON.filter((data) => data.name.search(regex) >= 0));
+      } else {
+        setFilterData([]);
+      }
+    };
+
+    return (
+      <View style={styles.MainContainer}>
+        <Autocomplete
+          autoCapitalize="none"
+          autoCorrect={false}
+          containerStyle={styles.AutocompleteStyle}
+          data={FilterData}
+          defaultValue={
+            JSON.stringify(selectedItem) === "{}" ? "" : selectedItem.name
+          }
+          keyExtractor={(item, i) => i.toString()}
+          onChangeText={(text) => SearchDataFromJSON(text)}
+          placeholder="start typing pokemon name..."
+          flatListProps={{
+            renderItem: ({ item }) => (
+              <TouchableOpacity
+                style={styles.input}
+                onPress={() => {
+                  setselectedItem(item);
+                  setFilterData([]);
+                  setPokemon(item);
+                }}
+              >
+                <Text style={styles.SearchBoxTextItem}>{item.name}</Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
+        <View style={styles.selectedTextContainer}>
+          {
+            <Text style={styles.selectedTextStyle}>
+              {JSON.stringify(selectedItem)}
+            </Text>
+          }
+        </View>
+      </View>
+    );
+    //
   };
 
   return (
@@ -128,10 +213,10 @@ export default function TabPokemonMapScreen({
           />
         ))}
       </MapView>
-      <DropPin />
-      <SavePin />
-
-      <Text>dscd</Text>
+      <View style={styles.drop_save_view}>
+        <DropPin />
+        <SavePin />
+      </View>
     </View>
   );
 }
@@ -146,27 +231,54 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-  poke_container: {
+  drop_pin_view: {
     backgroundColor: "white",
     flexDirection: "row",
     height: 30,
-    width: 100,
+    width: "100%",
     display: "flex",
     justifyContent: "center",
+    alignItems: "center",
     marginBottom: 10,
-  },
-  poke_butt: {
-    backgroundColor: "pink",
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-    flexDirection: "column",
-    width: 200,
   },
   item: {
     width: 100,
   },
+  drop_save_view: {},
+  save_pin_view: {
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    flexDirection: "row",
+    width: "100%",
+    height: 100,
+  },
+  dontDisplayMe: {
+    display: "none",
+  },
+  MainContainer: {
+    backgroundColor: "transparent",
+    flex: 1,
+    padding: 12,
+  },
+  AutocompleteStyle: {
+    flex: 1,
+    left: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    zIndex: 1,
+  },
+  SearchBoxTextItem: {
+    margin: 5,
+    fontSize: 16,
+    paddingTop: 4,
+  },
+  selectedTextContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  selectedTextStyle: {
+    textAlign: "center",
+    fontSize: 18,
+  },
+  input: {},
 });
