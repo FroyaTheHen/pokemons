@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import MapView, { Marker } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
 import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
-import { PokemonLocation, BASE_URL } from "../pokemons/Pokemons";
+import { PokemonsListContext } from "../contexts/PokemonListContext";
+import { PokemonLocation } from "../pokemons/Pokemons";
 import Autocomplete from "react-native-autocomplete-input";
 
 export default function TabPokemonMapScreen({
@@ -19,6 +20,7 @@ export default function TabPokemonMapScreen({
   const { pokemonsLocations, addPokemonLocation } = useContext(
     PokemonsLocationsContext
   );
+  const { pokemonsList } = useContext(PokemonsListContext);
 
   const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
 
@@ -41,8 +43,8 @@ export default function TabPokemonMapScreen({
   const [pin, setPin] = useState();
 
   const [pokemon, setPokemon] = useState({
-    name: "bulbasaur",
-    url: "https://pokeapi.co/api/v2/pokemon/1/",
+    name: undefined,
+    url: undefined,
   });
 
   // show either one of the pressables - switch on each click
@@ -75,8 +77,6 @@ export default function TabPokemonMapScreen({
   };
 
   const DropPin = () => {
-    // but maybe make the input or a poke list of names or whever and the save b. drop down
-    // only after the pin is dropped - that would be an elegent solution
     return (
       <View
         style={dropPinDisplay ? styles.drop_pin_view : styles.dontDisplayMe}
@@ -112,15 +112,9 @@ export default function TabPokemonMapScreen({
     const [FilterData, setFilterData] = useState([]);
     const [selectedItem, setselectedItem] = useState({});
 
-    async function getPokeData<T>(): Promise<T> {
-      const response = await fetch(`${BASE_URL}?limit=${20}&offset=${20}`);
-      const res = await response.json();
-      setMainJSON(res.results);
-    }
-
     useEffect(() => {
-      getPokeData();
-    }, []);
+      setMainJSON(pokemonsList);
+    });
 
     const SearchDataFromJSON = (query) => {
       if (query) {
@@ -189,19 +183,6 @@ export default function TabPokemonMapScreen({
         }}
       >
         <MarkerComponent />
-        <Marker
-          coordinate={{
-            latitude: 37.79032477931035,
-            longitude: -122.43240052571046,
-          }}
-        />
-        <Marker
-          coordinate={{
-            latitude: 37.79032477931035,
-            longitude: -122.43240052571046,
-          }}
-        />
-
         {markedLocations.map((l, index) => (
           <Marker
             key={index}

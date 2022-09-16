@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FavouritesPokemonProvider } from "./contexts/FavouritesContext";
 import { PokemonsLocationProvider } from "./contexts/PokeLocationContext";
+import { PokemonsListContextProvider } from "./contexts/PokemonListContext";
 
 import useCachedResources from "./hooks/useCachedResources";
 
@@ -18,12 +19,14 @@ export default function App() {
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
-          <FavouritesPokemonProvider>
-            <PokemonsLocationProvider>
-              <Navigation />
-              <StatusBar />
-            </PokemonsLocationProvider>
-          </FavouritesPokemonProvider>
+          <PokemonsListContextProvider>
+            <FavouritesPokemonProvider>
+              <PokemonsLocationProvider>
+                <Navigation />
+                <StatusBar />
+              </PokemonsLocationProvider>
+            </FavouritesPokemonProvider>
+          </PokemonsListContextProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>
     );

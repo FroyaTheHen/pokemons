@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Point } from "react-native-maps";
 import { PokemonLocation } from "../pokemons/Pokemons";
 import {
   savePokemonLocationToStorage,
