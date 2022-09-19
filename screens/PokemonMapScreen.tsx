@@ -11,6 +11,9 @@ import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
 import { PokemonLocation, BASE_URL } from "../pokemons/Pokemons";
 import Autocomplete from "react-native-autocomplete-input";
 
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { pokeGrey } from "../Styles";
+
 export default function TabPokemonMapScreen({
   navigation,
 }: {
@@ -19,8 +22,8 @@ export default function TabPokemonMapScreen({
   const { pokemonsLocations, addPokemonLocation } = useContext(
     PokemonsLocationsContext
   );
-
   const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
+  const [displayInput, setDisplayInput] = useState(false);
 
   const renderPokeMarkerComponent = (pokeLocation: PokemonLocation) => {
     return (
@@ -54,7 +57,6 @@ export default function TabPokemonMapScreen({
       <View
         style={savePinDisplay ? styles.save_pin_view : styles.dontDisplayMe}
       >
-        <AutoCompletePoke />
         <Pressable
           onPress={() => {
             const newPl: PokemonLocation = {
@@ -66,9 +68,13 @@ export default function TabPokemonMapScreen({
             setMarkedLocations([...markedLocations, newPl]);
             setDropPinDisplay(!dropPinDisplay);
             setSavePinDisplay(!savePinDisplay);
+            setDisplayInput(!displayInput);
           }}
         >
-          <Text>save pin</Text>
+          <Text>
+            <Ionicons name={"ios-pin"} size={25} color={"black"} />
+            save pokemon location
+          </Text>
         </Pressable>
       </View>
     );
@@ -76,7 +82,7 @@ export default function TabPokemonMapScreen({
 
   const DropPin = () => {
     // but maybe make the input or a poke list of names or whever and the save b. drop down
-    // only after the pin is dropped - that would be an elegent solution
+    // only after the pin is dropped - that would be an elegant solution
     return (
       <View
         style={dropPinDisplay ? styles.drop_pin_view : styles.dontDisplayMe}
@@ -86,9 +92,14 @@ export default function TabPokemonMapScreen({
             setPin(region);
             setDropPinDisplay(!dropPinDisplay);
             setSavePinDisplay(!savePinDisplay);
+            setDisplayInput(!displayInput);
+            console.log("set display input: " + displayInput);
           }}
         >
-          <Text>drop pin</Text>
+          <Text>
+            <Ionicons name={"ios-pin-outline"} size={25} color={"black"} />
+            mark pokemon location
+          </Text>
         </Pressable>
       </View>
     );
@@ -107,11 +118,22 @@ export default function TabPokemonMapScreen({
   };
 
   const AutoCompletePoke = () => {
+    console.log("AutoCompl Poke display input: " + displayInput);
+    console.log("  ");
     const [MainJSON, setMainJSON] = useState([]);
     const [FilterData, setFilterData] = useState([]);
     const [selectedItem, setselectedItem] = useState({});
 
+    const [mainContainerStyle, setMainContainerStyle] = useState(() => {
+      if (displayInput) {
+        return styles.MainContainer;
+      } else {
+        return { display: "none" };
+      }
+    });
+
     async function getPokeData<T>(): Promise<T> {
+      // optimize me
       const response = await fetch(`${BASE_URL}?limit=1154`);
       const res = await response.json();
       setMainJSON(res.results);
@@ -132,17 +154,20 @@ export default function TabPokemonMapScreen({
     };
 
     return (
-      <View style={styles.MainContainer}>
+      <View style={mainContainerStyle}>
         <Autocomplete
           autoCapitalize="none"
           autoCorrect={false}
           containerStyle={styles.AutocompleteStyle}
           data={FilterData}
           defaultValue={
-            JSON.stringify(selectedItem) === "{}" ? "" : selectedItem.name
+            JSON.stringify(selectedItem) === "" ? "" : selectedItem.name
           }
           keyExtractor={(item, i) => i.toString()}
-          onChangeText={(text) => SearchDataFromJSON(text)}
+          onChangeText={(text) => {
+            SearchDataFromJSON(text);
+            setMainContainerStyle(styles.MainContaionerOnFocus);
+          }}
           placeholder="start typing pokemon name..."
           flatListProps={{
             renderItem: ({ item }) => (
@@ -174,6 +199,7 @@ export default function TabPokemonMapScreen({
 
   return (
     <View style={styles.container}>
+      <AutoCompletePoke />
       <MapView
         // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
         style={styles.map}
@@ -196,6 +222,7 @@ export default function TabPokemonMapScreen({
               longitude: l.longitude,
             }}
             description={l.name}
+            pinColor={"blue"}
           />
         ))}
       </MapView>
@@ -218,40 +245,50 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   drop_pin_view: {
-    backgroundColor: "white",
-    flexDirection: "row",
-    height: 30,
-    width: "100%",
-    display: "flex",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    height: 80,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10,
+    borderColor: pokeGrey,
+    borderWidth: 1,
   },
   item: {
     width: 100,
   },
-  drop_save_view: {},
-  save_pin_view: {
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    flexDirection: "row",
+  drop_save_view: {
     width: "100%",
-    height: 100,
+  },
+  save_pin_view: {
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    height: 80,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: pokeGrey,
+    borderWidth: 1,
   },
   dontDisplayMe: {
     display: "none",
   },
   MainContainer: {
     backgroundColor: "transparent",
-    flex: 1,
     padding: 12,
+    zIndex: 1,
+    width: 300,
+    height: 70,
+    position: "absolute",
+    top: 0,
+  },
+  MainContaionerOnFocus: {
+    backgroundColor: "transparent",
+    padding: 12,
+    zIndex: 1,
+    width: 300,
+    height: 600,
+    position: "absolute",
+    top: 0,
   },
   AutocompleteStyle: {
-    flex: 1,
-    left: 0,
-    position: "absolute",
-    right: 0,
-    top: 0,
-    zIndex: 1,
+    height: "100%",
   },
   SearchBoxTextItem: {
     margin: 5,
@@ -266,5 +303,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
   },
-  input: {},
+  input: {
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+  },
 });
