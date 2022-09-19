@@ -8,12 +8,13 @@ import {
 } from "react-native";
 import MapView, { Marker } from "react-native-maps"; // remove PROVIDER_GOOGLE import if not using Google Maps
 import { PokemonsLocationsContext } from "../contexts/PokeLocationContext";
-import { PokemonLocation, BASE_URL } from "../pokemons/Pokemons";
+import { PokemonLocation } from "../pokemons/Pokemons";
 import Autocomplete from "react-native-autocomplete-input";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { pokeGrey } from "../Styles";
 import PokemonsListContext from "../contexts/PokemonListContext";
+import * as Location from "expo-location";
 
 export default function TabPokemonMapScreen({
   navigation,
@@ -23,6 +24,28 @@ export default function TabPokemonMapScreen({
   const { pokemonsLocations, addPokemonLocation } = useContext(
     PokemonsLocationsContext
   );
+
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [initialRegion, setInitialRegion] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      if (!errorMsg) {
+        setInitialRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
+        });
+      }
+    })();
+  }, []);
 
   const { pokemonsList } = useContext(PokemonsListContext);
   const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
@@ -96,7 +119,6 @@ export default function TabPokemonMapScreen({
             setDropPinDisplay(!dropPinDisplay);
             setSavePinDisplay(!savePinDisplay);
             setDisplayInput(!displayInput);
-            console.log("set display input: " + displayInput);
           }}
         >
           <Text>
@@ -197,12 +219,7 @@ export default function TabPokemonMapScreen({
       <MapView
         // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
         style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }}
+        initialRegion={initialRegion}
         onRegionChangeComplete={(region) => {
           setRegion(region);
         }}
