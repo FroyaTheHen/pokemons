@@ -7,11 +7,11 @@ import { globalStyles, pokeGrey } from "../Styles";
 import { AddOrRemoveComponent } from "../pokemons/AddOrRemoveComponent";
 import { styles } from "../SwipeablePokeRowComponent";
 
-import { RootTabScreenProps } from "../types";
-
 export default function TabPokemonFavouritesScreen({
   navigation,
-}: RootTabScreenProps<"PokeDetails">) {
+}: {
+  navigation: any;
+}) {
   const { favouritesPokemons } = useContext(FavouritesPokemonsContext);
 
   const Item = ({ poke }: { poke: Pokemon }) => (

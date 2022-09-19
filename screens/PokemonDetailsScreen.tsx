@@ -34,7 +34,7 @@ export default function TabPokemonDetailsScreen(params: Props) {
 
   useEffect(() => {
     getPokeImg();
-  }, [gender]);
+  }, [gender]); // eslint-disable-line
 
   useAsyncEffect(async () => {
     const _pokemon = await fetchData<Pokemon>(pokeUrl);
