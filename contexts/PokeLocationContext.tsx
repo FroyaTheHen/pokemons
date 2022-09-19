@@ -38,7 +38,6 @@ export function PokemonsLocationProvider({
   const addPokemonLocation = useCallback(
     (newPokemonLocation: PokemonLocation) => {
       setPokemonsLocations([...pokemonsLocations, newPokemonLocation]);
-      console.log(pokemonsLocations);
       savePokemonLocationToStorage(newPokemonLocation);
     },
     [pokemonsLocations]

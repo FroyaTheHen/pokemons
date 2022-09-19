@@ -41,8 +41,8 @@ export default function TabPokemonMapScreen({
   const [pin, setPin] = useState();
 
   const [pokemon, setPokemon] = useState({
-    name: "bulbasaur",
-    url: "https://pokeapi.co/api/v2/pokemon/1/",
+    name: undefined,
+    url: undefined,
   });
 
   // show either one of the pressables - switch on each click
@@ -100,7 +100,6 @@ export default function TabPokemonMapScreen({
         coordinate={pin}
         draggable={true}
         onDragEnd={(e) => {
-          console.log(e.nativeEvent.coordinate);
           setPin(e.nativeEvent.coordinate);
         }}
       />
@@ -113,7 +112,7 @@ export default function TabPokemonMapScreen({
     const [selectedItem, setselectedItem] = useState({});
 
     async function getPokeData<T>(): Promise<T> {
-      const response = await fetch(`${BASE_URL}?limit=${20}&offset=${20}`);
+      const response = await fetch(`${BASE_URL}?limit=1154`);
       const res = await response.json();
       setMainJSON(res.results);
     }
@@ -189,19 +188,6 @@ export default function TabPokemonMapScreen({
         }}
       >
         <MarkerComponent />
-        <Marker
-          coordinate={{
-            latitude: 37.79032477931035,
-            longitude: -122.43240052571046,
-          }}
-        />
-        <Marker
-          coordinate={{
-            latitude: 37.79032477931035,
-            longitude: -122.43240052571046,
-          }}
-        />
-
         {markedLocations.map((l, index) => (
           <Marker
             key={index}
