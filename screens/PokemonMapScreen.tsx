@@ -13,6 +13,7 @@ import Autocomplete from "react-native-autocomplete-input";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { pokeGrey } from "../Styles";
+import PokemonsListContext from "../contexts/PokemonListContext";
 
 export default function TabPokemonMapScreen({
   navigation,
@@ -22,6 +23,8 @@ export default function TabPokemonMapScreen({
   const { pokemonsLocations, addPokemonLocation } = useContext(
     PokemonsLocationsContext
   );
+
+  const { pokemonsList } = useContext(PokemonsListContext);
   const [markedLocations, setMarkedLocations] = useState(pokemonsLocations);
   const [displayInput, setDisplayInput] = useState(false);
 
@@ -118,11 +121,13 @@ export default function TabPokemonMapScreen({
   };
 
   const AutoCompletePoke = () => {
-    console.log("AutoCompl Poke display input: " + displayInput);
-    console.log("  ");
     const [MainJSON, setMainJSON] = useState([]);
     const [FilterData, setFilterData] = useState([]);
     const [selectedItem, setselectedItem] = useState({});
+
+    useEffect(() => {
+      setMainJSON(pokemonsList);
+    }, []);
 
     const [mainContainerStyle, setMainContainerStyle] = useState(() => {
       if (displayInput) {
@@ -131,17 +136,6 @@ export default function TabPokemonMapScreen({
         return { display: "none" };
       }
     });
-
-    async function getPokeData<T>(): Promise<T> {
-      // optimize me
-      const response = await fetch(`${BASE_URL}?limit=1154`);
-      const res = await response.json();
-      setMainJSON(res.results);
-    }
-
-    useEffect(() => {
-      getPokeData();
-    }, []);
 
     const SearchDataFromJSON = (query) => {
       if (query) {
