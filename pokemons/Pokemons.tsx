@@ -48,3 +48,14 @@ export function generateIndexes(count: number = DEFAULT_NUMBER_OF_POKEMONS) {
   }
   return indexes;
 }
+
+export interface PokemonLocation {
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface Point {
+  latitude: number;
+  longitude: number;
+}

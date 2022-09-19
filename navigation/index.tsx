@@ -9,6 +9,7 @@ import * as React from "react";
 import TabPokemonListScreen from "../screens/PokemonListScreen";
 import TabPokemonDetailsScreen from "../screens/PokemonDetailsScreen";
 import TabPokemonFavouritesScreen from "../screens/PokemonFavouritesScreen";
+import TabPokemonMapScreen from "../screens/PokemonMapScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -25,6 +26,7 @@ export function Navigation() {
 const PokeStack = createNativeStackNavigator<{
   PokeList: undefined;
   PokeDetails: undefined;
+  PokeMap: undefined;
   PokeFavourites: undefined;
 }>();
 
@@ -40,6 +42,11 @@ function PokeStackNavigator() {
         name="PokeDetails"
         component={TabPokemonDetailsScreen}
         options={{ title: "Details" }}
+      />
+      <PokeStack.Screen
+        name="PokeMap"
+        component={TabPokemonMapScreen}
+        options={{ title: "Map" }}
       />
     </PokeStack.Navigator>
   );
@@ -58,6 +65,8 @@ function TabNav() {
             iconName = focused ? "ios-heart" : "ios-heart-outline";
           } else if (route.name === "List") {
             iconName = "ios-list-outline";
+          } else if (route.name === "Map") {
+            iconName = focused ? "ios-map" : "ios-map-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -67,6 +76,7 @@ function TabNav() {
     >
       <Tab.Screen name="List" component={PokeStackNavigator} />
       <Tab.Screen name="Favourites" component={TabPokemonFavouritesScreen} />
+      <Tab.Screen name="Map" component={TabPokemonMapScreen} />
     </Tab.Navigator>
   );
 }

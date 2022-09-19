@@ -1,11 +1,11 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Pokemon } from "./pokemons/Pokemons";
+import { Pokemon } from "../pokemons/Pokemons";
 import {
   removePokemonFromFavourites,
   savePokemonToFavourites,
   retrieveAllFavouritesPokemons,
   parseToPokemonArray,
-} from "./PokeStorage";
+} from "../PokeStorage";
 
 interface Pikapika {
   favouritesPokemons: Array<Pokemon>;

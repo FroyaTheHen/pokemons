@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Text, FlatList, Pressable } from "react-native";
-import { FavouritesPokemonsContext } from "../FavouritesContext";
+import { FavouritesPokemonsContext } from "../contexts/FavouritesContext";
 import { View } from "../components/Themed";
 import { Pokemon } from "../pokemons/Pokemons";
 import { globalStyles, pokeGrey } from "../Styles";

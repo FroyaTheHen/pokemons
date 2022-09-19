@@ -5,7 +5,7 @@ import { Animated, StyleSheet, I18nManager, View, Text } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import { FavouritesPokemonsContext } from "./FavouritesContext";
+import { FavouritesPokemonsContext } from "./contexts/FavouritesContext";
 import { Pokemon } from "./pokemons/Pokemons";
 import { pokeGrey } from "./Styles";
 

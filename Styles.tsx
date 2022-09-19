@@ -11,6 +11,7 @@ export const globalStyles = StyleSheet.create({
     fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
