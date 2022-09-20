@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text } from "react-native";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { BASE_URL } from "../pokemons/Pokemons";
 import { Example } from "../SwipeablePokeRowComponent";
 import { PokeActivityIndicator } from "../commonComponents/pokeActivityIndicator";
+import PokemonsListContext from "../contexts/PokemonListContext";
 
 const POKE_ON_PAGE_LIMIT: number = 20;
 
@@ -15,15 +16,22 @@ export default function TabPokemonListScreen({
   const [offset, setOffset] = useState(20);
   const [pokeDataCount, setPokeDataCount] = useState(21);
 
+  const { pokemonsList } = useContext(PokemonsListContext);
+
   async function getPokeData<T>(): Promise<T> {
-    const response = await fetch(
-      `${BASE_URL}?limit=${POKE_ON_PAGE_LIMIT}&offset=${offset}`
-    );
-    const res = await response.json();
-    // consider updating number of reults only once at the begining
-    setPokeDataCount(res.count);
-    setPokeData(pokeData.concat(res.results));
-    return res.results;
+    if (!pokemonsList.length) {
+      const response = await fetch(
+        `${BASE_URL}?limit=${POKE_ON_PAGE_LIMIT}&offset=${offset}`
+      );
+      const res = await response.json();
+      // consider updating number of reults only once at the begining
+      setPokeDataCount(res.count);
+      setPokeData(pokeData.concat(res.results));
+      return res.results;
+    } else {
+      let pd = pokemonsList.slice(0, offset);
+      setPokeData(pd);
+    }
   }
 
   useEffect(() => {
